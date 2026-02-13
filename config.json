@@ -2,13 +2,13 @@
   "brand": {
     "name": "일룸",
     "name_en": "iloom",
-    "color": "#00d4ff"
+    "color": "#D45D5D"
   },
   "competitors": [
-    { "name": "이케아", "name_en": "ikea", "color": "#3b82f6" },
-    { "name": "한샘", "name_en": "hanssem", "color": "#ef4444" },
-    { "name": "까사미아", "name_en": "casamia", "color": "#f97316" },
-    { "name": "자코모", "name_en": "jacomo", "color": "#22c55e" }
+    { "name": "이케아", "name_en": "ikea", "color": "#4A8B7F" },
+    { "name": "한샘", "name_en": "hanssem", "color": "#6B8F71" },
+    { "name": "까사미아", "name_en": "casamia", "color": "#C4956A" },
+    { "name": "자코모", "name_en": "jacomo", "color": "#8B7D6B" }
   ],
   "keyword_seeds": [
     "일룸", "일룸 책상", "일룸 소파", "일룸 침대", "일룸 수납",

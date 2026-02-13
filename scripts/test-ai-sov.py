@@ -103,7 +103,7 @@ def query_gemini(question):
         import google.generativeai as genai
 
         genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel("gemini-2.0-flash")
         resp = model.generate_content(question)
         return resp.text
     except Exception as e:

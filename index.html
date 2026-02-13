@@ -4,38 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Brand Intelligence Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Noto+Serif+KR:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
   <style>
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --bg-card: #1a1a24;
-      --bg-card-hover: #22222e;
-      --text-primary: #e8e8ed;
-      --text-secondary: #8888a0;
-      --text-muted: #555570;
-      --accent: #00d4ff;
-      --accent-purple: #9333ea;
-      --border: #2a2a3a;
-      --critical: #ef4444;
-      --high: #f97316;
-      --medium: #22c55e;
-      --positive: #22c55e;
-      --negative: #ef4444;
-      --neutral: #6b7280;
+      /* DBT Deep Forest Theme */
+      --bg-primary: #F3F2ED;
+      --bg-forest: #1B3B36;
+      --bg-forest-hover: #234945;
+      --bg-dark: #0A1F1C;
+      --text-primary: #1B3B36;
+      --text-on-dark: #F3F2ED;
+      --text-secondary: rgba(27,59,54,0.6);
+      --text-muted: rgba(27,59,54,0.4);
+      --text-on-dark-secondary: rgba(243,242,237,0.6);
+      --text-on-dark-muted: rgba(243,242,237,0.4);
+      --accent: #D45D5D;
+      --positive: #6B8F71;
+      --negative: #D45D5D;
+      --neutral: #8B8B7A;
+      --high: #C4956A;
+      --border-light: rgba(27,59,54,0.15);
+      --border-dark: rgba(243,242,237,0.1);
+      --glass-bg: rgba(255,255,255,0.05);
+      --glass-border: rgba(255,255,255,0.1);
+      /* Typography */
+      --font-serif: 'Playfair Display', serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-kr: 'Noto Serif KR', serif;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    ::selection { background: var(--bg-forest); color: var(--text-on-dark); }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: var(--font-sans);
       background: var(--bg-primary);
       color: var(--text-primary);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
+    /* Film grain overlay */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    @media (prefers-reduced-motion: reduce) { body::after { display: none; } }
 
     /* Header */
     .header {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-light);
       padding: 16px 24px;
       position: sticky;
       top: 0;
@@ -55,26 +81,28 @@
     }
     .logo-icon {
       width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      background: var(--bg-forest);
       border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 700; color: #fff;
+      font-family: var(--font-serif);
+      font-size: 16px; font-weight: 700; color: var(--text-on-dark);
     }
-    .logo-text { font-size: 18px; font-weight: 600; }
-    .logo-text span { color: var(--text-secondary); font-weight: 400; font-size: 14px; margin-left: 8px; }
+    .logo-text { font-family: var(--font-serif); font-size: 18px; font-weight: 600; color: var(--text-primary); }
+    .logo-text span { color: var(--text-secondary); font-family: var(--font-sans); font-weight: 400; font-size: 14px; margin-left: 8px; }
     .header-meta {
       display: flex; align-items: center; gap: 16px;
-      font-size: 12px; color: var(--text-secondary);
+      font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);
     }
     .header-meta .badge {
-      background: rgba(0,212,255,0.1); color: var(--accent);
+      background: rgba(212,93,93,0.1); color: var(--accent);
       padding: 4px 10px; border-radius: 12px; font-size: 11px;
+      font-family: var(--font-mono); letter-spacing: 0.03em;
     }
 
     /* Tabs */
     .tab-nav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-light);
       padding: 0 24px;
       overflow-x: auto;
     }
@@ -88,7 +116,10 @@
       padding: 14px 20px;
       background: none; border: none;
       color: var(--text-secondary);
-      font-size: 14px; font-weight: 500;
+      font-family: var(--font-mono);
+      font-size: 12px; font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       cursor: pointer;
       border-bottom: 2px solid transparent;
       white-space: nowrap;
@@ -115,39 +146,43 @@
     .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
     .grid-1 { margin-bottom: 24px; }
 
-    /* Cards */
+    /* Cards - Forest background with glass */
     .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
       border-radius: 12px;
       padding: 20px;
-      transition: transform 0.2s;
+      transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1),
+                  box-shadow 0.4s ease;
     }
-    .card:hover { transform: translateY(-2px); }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(27, 59, 54, 0.15);
+    }
     .card-title {
-      font-size: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-secondary);
+      letter-spacing: 0.08em;
+      color: var(--text-on-dark-secondary);
       margin-bottom: 8px;
     }
 
     /* KPI Cards */
     .kpi-value {
+      font-family: var(--font-mono);
       font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: var(--accent);
     }
     .kpi-change {
+      font-family: var(--font-mono);
       font-size: 13px;
       margin-top: 4px;
     }
     .kpi-change.up { color: var(--positive); }
     .kpi-change.down { color: var(--negative); }
-    .kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .kpi-sub { font-size: 12px; color: var(--text-on-dark-muted); margin-top: 4px; }
 
     /* Chart container */
     .chart-container {
@@ -159,11 +194,13 @@
 
     /* Section title */
     .section-title {
+      font-family: var(--font-serif);
       font-size: 16px;
       font-weight: 600;
+      color: var(--text-primary);
       margin-bottom: 16px;
       padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-light);
     }
 
     /* Journey flow */
@@ -176,32 +213,37 @@
       flex-wrap: wrap;
     }
     .journey-node {
-      background: var(--bg-card);
-      border: 2px solid var(--border);
+      background: var(--bg-forest);
+      border: 2px solid var(--glass-border);
       border-radius: 12px;
       padding: 20px;
       text-align: center;
       min-width: 180px;
       flex: 1;
       max-width: 280px;
+      color: var(--text-on-dark);
     }
     .journey-node.highlight {
       border-color: var(--accent);
-      box-shadow: 0 0 20px rgba(0,212,255,0.15);
+      box-shadow: 0 0 20px rgba(212,93,93,0.2);
     }
     .journey-node .label {
-      font-size: 13px;
-      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-on-dark-secondary);
       margin-bottom: 4px;
     }
     .journey-node .value {
+      font-family: var(--font-mono);
       font-size: 28px;
       font-weight: 700;
       color: var(--accent);
     }
     .journey-node .keywords {
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-on-dark-muted);
       margin-top: 8px;
     }
     .journey-arrow {
@@ -211,6 +253,7 @@
       flex-shrink: 0;
     }
     .journey-rate {
+      font-family: var(--font-mono);
       font-size: 11px;
       color: var(--text-secondary);
       text-align: center;
@@ -222,13 +265,13 @@
       align-items: center;
       gap: 12px;
       padding: 8px 0;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-dark);
     }
     .exit-bar:last-child { border-bottom: none; }
-    .exit-bar .name { width: 80px; font-size: 13px; }
+    .exit-bar .name { width: 80px; font-size: 13px; color: var(--text-on-dark); }
     .exit-bar .bar-track {
       flex: 1; height: 24px;
-      background: var(--bg-secondary);
+      background: var(--bg-dark);
       border-radius: 4px;
       overflow: hidden;
     }
@@ -243,12 +286,12 @@
       color: #fff;
       transition: width 0.6s ease;
     }
-    .exit-bar .pct { width: 50px; text-align: right; font-size: 13px; color: var(--text-secondary); }
+    .exit-bar .pct { width: 50px; text-align: right; font-size: 13px; color: var(--text-on-dark-secondary); }
 
     /* Cluster cards */
     .cluster-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
       border-radius: 12px;
       padding: 20px;
       border-left: 4px solid;
@@ -258,44 +301,49 @@
       margin-bottom: 12px;
     }
     .cluster-persona {
-      font-size: 16px; font-weight: 600;
+      font-family: var(--font-serif);
+      font-size: 16px; font-weight: 600; color: var(--text-on-dark);
     }
     .cluster-share {
+      font-family: var(--font-mono);
       font-size: 24px; font-weight: 700; color: var(--accent);
     }
     .cluster-desc {
-      font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;
+      font-size: 13px; color: var(--text-on-dark-secondary); margin-bottom: 12px;
     }
     .cluster-tags {
       display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
     }
     .cluster-tag {
-      background: var(--bg-secondary);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
       padding: 4px 10px; border-radius: 6px;
-      font-size: 11px; color: var(--text-secondary);
+      font-size: 11px; color: var(--text-on-dark-secondary);
     }
     .cluster-detail {
       display: none;
       margin-top: 12px;
       padding-top: 12px;
-      border-top: 1px solid var(--border);
+      border-top: 1px solid var(--border-dark);
     }
     .cluster-detail.open { display: block; }
     .cluster-detail h4 {
-      font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;
-      text-transform: uppercase;
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--text-on-dark-muted); margin-bottom: 8px;
+      text-transform: uppercase; letter-spacing: 0.05em;
     }
     .cluster-detail ul {
       list-style: none; padding: 0;
     }
     .cluster-detail li {
-      font-size: 13px; padding: 4px 0; color: var(--text-primary);
+      font-size: 13px; padding: 4px 0; color: var(--text-on-dark);
     }
     .toggle-btn {
-      background: none; border: 1px solid var(--border);
-      color: var(--text-secondary); padding: 6px 12px;
-      border-radius: 6px; cursor: pointer; font-size: 12px;
-      margin-top: 8px;
+      background: none; border: 1px solid var(--glass-border);
+      color: var(--text-on-dark-secondary); padding: 6px 12px;
+      border-radius: 6px; cursor: pointer;
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em;
+      margin-top: 8px; transition: all 0.2s;
     }
     .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -304,8 +352,8 @@
     .sentiment-label {
       display: flex; justify-content: space-between; margin-bottom: 4px;
     }
-    .sentiment-label .topic { font-size: 14px; }
-    .sentiment-label .count { font-size: 12px; color: var(--text-secondary); }
+    .sentiment-label .topic { font-size: 14px; color: var(--text-on-dark); }
+    .sentiment-label .count { font-size: 12px; color: var(--text-on-dark-secondary); }
     .sentiment-track {
       display: flex; height: 20px; border-radius: 4px; overflow: hidden;
     }
@@ -315,47 +363,51 @@
 
     /* Strategy cards */
     .strategy-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
       border-radius: 12px;
       padding: 20px;
       border-top: 3px solid;
     }
-    .strategy-card[data-priority="critical"] { border-top-color: var(--critical); }
+    .strategy-card[data-priority="critical"] { border-top-color: var(--negative); }
     .strategy-card[data-priority="high"] { border-top-color: var(--high); }
-    .strategy-card[data-priority="medium"] { border-top-color: var(--medium); }
+    .strategy-card[data-priority="medium"] { border-top-color: var(--positive); }
     .strategy-header {
       display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;
     }
-    .strategy-title { font-size: 15px; font-weight: 600; }
+    .strategy-title { font-family: var(--font-serif); font-size: 15px; font-weight: 600; color: var(--text-on-dark); }
     .priority-badge {
-      padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 10px;
+      font-family: var(--font-mono); font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
     }
-    .priority-badge.critical { background: rgba(239,68,68,0.15); color: var(--critical); }
-    .priority-badge.high { background: rgba(249,115,22,0.15); color: var(--high); }
-    .priority-badge.medium { background: rgba(34,197,94,0.15); color: var(--medium); }
+    .priority-badge.critical { background: rgba(212,93,93,0.15); color: var(--negative); }
+    .priority-badge.high { background: rgba(196,149,106,0.15); color: var(--high); }
+    .priority-badge.medium { background: rgba(107,143,113,0.15); color: var(--positive); }
     .strategy-category {
-      font-size: 12px; color: var(--text-muted); margin-bottom: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px; color: var(--text-on-dark-muted); margin-bottom: 8px;
+      text-transform: uppercase; letter-spacing: 0.03em;
     }
     .strategy-desc {
-      font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;
+      font-size: 13px; color: var(--text-on-dark-secondary); margin-bottom: 12px;
     }
     .strategy-metrics {
       display: flex; gap: 12px; margin-bottom: 12px;
     }
     .strategy-metric {
-      background: var(--bg-secondary); padding: 6px 12px; border-radius: 8px;
-      font-size: 12px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      padding: 6px 12px; border-radius: 8px; font-size: 12px;
     }
-    .strategy-metric .metric-label { color: var(--text-muted); }
-    .strategy-metric .metric-value { color: var(--accent); font-weight: 600; }
+    .strategy-metric .metric-label { color: var(--text-on-dark-muted); }
+    .strategy-metric .metric-value { color: var(--accent); font-weight: 600; font-family: var(--font-mono); }
     .strategy-detail {
-      display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+      display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-dark);
     }
     .strategy-detail.open { display: block; }
     .strategy-detail .action-item {
       font-size: 13px; padding: 6px 0; padding-left: 16px; position: relative;
-      color: var(--text-secondary);
+      color: var(--text-on-dark-secondary);
     }
     .strategy-detail .action-item::before {
       content: ''; position: absolute; left: 0; top: 12px;
@@ -363,8 +415,9 @@
       border-radius: 50%;
     }
     .strategy-expected {
-      margin-top: 12px; padding: 10px; background: var(--bg-secondary);
-      border-radius: 8px; font-size: 12px; color: var(--text-secondary);
+      margin-top: 12px; padding: 10px;
+      background: var(--glass-bg); border: 1px solid var(--glass-border);
+      border-radius: 8px; font-size: 12px; color: var(--text-on-dark-secondary);
     }
     .strategy-expected strong { color: var(--accent); }
 
@@ -374,32 +427,35 @@
     }
     .filter-btn {
       padding: 6px 16px; border-radius: 8px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      color: var(--text-secondary); font-size: 13px; cursor: pointer;
+      background: var(--bg-forest); border: 1px solid var(--glass-border);
+      color: var(--text-on-dark-secondary);
+      font-family: var(--font-mono); font-size: 12px;
+      letter-spacing: 0.03em; cursor: pointer; transition: all 0.2s;
     }
     .filter-btn.active {
-      background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600;
+      background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600;
     }
 
     /* Insight cards */
     .insight-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
       border-radius: 12px;
       padding: 16px;
       border-left: 3px solid;
     }
     .insight-card.strength { border-left-color: var(--positive); }
     .insight-card.weakness { border-left-color: var(--negative); }
-    .insight-card.opportunity { border-left-color: var(--accent); }
+    .insight-card.opportunity { border-left-color: var(--high); }
     .insight-type {
-      font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+      font-family: var(--font-mono);
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
       margin-bottom: 6px; font-weight: 600;
     }
     .insight-card.strength .insight-type { color: var(--positive); }
     .insight-card.weakness .insight-type { color: var(--negative); }
-    .insight-card.opportunity .insight-type { color: var(--accent); }
-    .insight-text { font-size: 13px; color: var(--text-secondary); }
+    .insight-card.opportunity .insight-type { color: var(--high); }
+    .insight-text { font-size: 13px; color: var(--text-on-dark-secondary); }
 
     /* Data table */
     .data-table {
@@ -408,25 +464,185 @@
     }
     .data-table th {
       text-align: left;
-      font-size: 11px;
+      font-family: var(--font-mono);
+      font-size: 10px;
       text-transform: uppercase;
-      color: var(--text-muted);
-      letter-spacing: 0.5px;
+      letter-spacing: 0.08em;
+      color: var(--text-on-dark-muted);
       padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-dark);
     }
     .data-table td {
       font-size: 14px;
       padding: 10px 12px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid var(--border-dark);
+      color: var(--text-on-dark);
     }
     .data-table tr:hover td {
-      background: var(--bg-card-hover);
+      background: var(--bg-forest-hover);
     }
-    .data-table .rank { font-weight: 700; color: var(--accent); }
+    .data-table .rank { font-family: var(--font-mono); font-weight: 700; color: var(--accent); }
     .data-table .brand-dot {
       display: inline-block; width: 8px; height: 8px;
       border-radius: 50%; margin-right: 8px;
+    }
+
+    /* Alert box */
+    .alert-box {
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
+      border-left: 4px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .alert-box .alert-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .alert-box .alert-body {
+      font-size: 14px;
+      color: var(--text-on-dark);
+      line-height: 1.6;
+    }
+
+    /* Action steps */
+    .action-steps { margin-bottom: 24px; }
+    .action-step {
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .action-step .step-badge {
+      min-width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 14px; font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .action-step .step-content { flex: 1; }
+    .action-step .step-title {
+      font-family: var(--font-serif);
+      font-size: 14px; font-weight: 600;
+      color: var(--text-on-dark);
+      margin-bottom: 4px;
+    }
+    .action-step .step-desc {
+      font-size: 13px;
+      color: var(--text-on-dark-secondary);
+      margin-bottom: 4px;
+    }
+    .action-step .step-metric {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent);
+    }
+    .action-step .step-priority {
+      padding: 2px 8px; border-radius: 8px;
+      font-family: var(--font-mono); font-size: 10px;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      flex-shrink: 0;
+    }
+    .action-step .step-priority.high { background: rgba(212,93,93,0.15); color: var(--negative); }
+    .action-step .step-priority.medium { background: rgba(196,149,106,0.15); color: var(--high); }
+
+    /* Path examples */
+    .path-example {
+      background: var(--bg-forest);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-left: 4px solid;
+    }
+    .path-example.exit { border-left-color: var(--negative); }
+    .path-example.entry { border-left-color: var(--positive); }
+    .path-badge {
+      padding: 3px 10px; border-radius: 8px;
+      font-family: var(--font-mono); font-size: 10px;
+      font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; flex-shrink: 0;
+    }
+    .path-badge.exit { background: rgba(212,93,93,0.15); color: var(--negative); }
+    .path-badge.entry { background: rgba(107,143,113,0.15); color: var(--positive); }
+    .path-flow {
+      display: flex; align-items: center; gap: 8px;
+      flex: 1;
+      font-size: 14px; color: var(--text-on-dark);
+    }
+    .path-flow .path-arrow {
+      color: var(--text-on-dark-muted);
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .path-flow .path-node {
+      padding: 4px 12px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .path-share {
+      font-family: var(--font-mono);
+      font-size: 13px; font-weight: 600;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* Checklist items */
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 0;
+      font-size: 13px;
+      color: var(--text-on-dark-secondary);
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-dark);
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 18px; height: 18px;
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      flex-shrink: 0;
+      cursor: pointer;
+      position: relative;
+      margin-top: 1px;
+    }
+    .checklist-item input[type="checkbox"]:checked {
+      background: var(--accent);
+    }
+    .checklist-item input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px; top: 1px;
+      width: 6px; height: 10px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .checklist-item input[type="checkbox"]:checked + span {
+      text-decoration: line-through;
+      color: var(--text-on-dark-muted);
     }
 
     /* Loading */
@@ -486,6 +702,57 @@
 
 <script>
 // ============================================================
+// DBT Chart Theme
+// ============================================================
+const CHART_THEME = {
+  brandColors: {
+    primary: '#D45D5D',
+    competitors: ['#4A8B7F', '#6B8F71', '#C4956A', '#8B7D6B']
+  },
+  semantic: {
+    positive: '#6B8F71',
+    negative: '#D45D5D',
+    neutral: '#8B8B7A'
+  },
+  clusterColors: ['#D45D5D', '#C4956A', '#6B8F71', '#8B7D6B', '#7A8B6B'],
+  funnelColors: ['#4A8B7F', '#D45D5D', '#C4956A'],
+  genderColors: ['#D45D5D', '#4A8B7F'],
+  ageColor: '#6B8F71',
+  priorityColors: { critical: '#D45D5D', high: '#C4956A', medium: '#6B8F71' },
+  darkSurface: {
+    gridColor: 'rgba(243,242,237,0.12)',
+    tickColor: 'rgba(243,242,237,0.5)',
+    titleColor: 'rgba(243,242,237,0.5)'
+  },
+  fonts: {
+    family: "'JetBrains Mono', monospace"
+  }
+};
+
+// Chart.js Global Defaults
+Chart.defaults.color = CHART_THEME.darkSurface.tickColor;
+Chart.defaults.borderColor = CHART_THEME.darkSurface.gridColor;
+Chart.defaults.font.family = CHART_THEME.fonts.family;
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.legend.labels.color = CHART_THEME.darkSurface.tickColor;
+Chart.defaults.plugins.legend.labels.padding = 12;
+Chart.defaults.plugins.legend.labels.font = { size: 11, family: CHART_THEME.fonts.family };
+Chart.defaults.plugins.tooltip.backgroundColor = '#0A1F1C';
+Chart.defaults.plugins.tooltip.borderColor = 'rgba(243,242,237,0.15)';
+Chart.defaults.plugins.tooltip.borderWidth = 1;
+Chart.defaults.plugins.tooltip.padding = 10;
+Chart.defaults.plugins.tooltip.cornerRadius = 8;
+Chart.defaults.plugins.tooltip.titleFont = { family: CHART_THEME.fonts.family };
+Chart.defaults.plugins.tooltip.bodyFont = { family: CHART_THEME.fonts.family };
+
+function themeColorAlpha(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// ============================================================
 // Global State
 // ============================================================
 let CONFIG = null;
@@ -542,12 +809,30 @@ function initTabs() {
   });
 }
 
+const CHART_INIT_FNS = {
+  1: initMarketCharts,
+  2: initJourneyCharts,
+  3: initClusterCharts,
+  4: initAICharts,
+  5: initStrategyCharts
+};
+const CHARTS_INITIALIZED = new Set();
+
 function switchTab(idx) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.querySelector(`.tab-btn[data-tab="${idx}"]`).classList.add('active');
   const tc = document.getElementById(`tab-${idx}`);
-  if (tc) tc.classList.add('active');
+  if (tc) {
+    tc.classList.add('active');
+    // Lazy init: use rAF so browser paints the now-visible tab before Chart.js reads canvas size
+    if (!CHARTS_INITIALIZED.has(idx) && CHART_INIT_FNS[idx]) {
+      requestAnimationFrame(() => {
+        try { CHART_INIT_FNS[idx](); } catch(e) { console.error(`[Chart Error] Tab ${idx}:`, e); }
+        CHARTS_INITIALIZED.add(idx);
+      });
+    }
+  }
 }
 
 // ============================================================
@@ -568,15 +853,246 @@ function renderDashboard() {
     content.appendChild(div);
   });
 
-  // Initialize charts after DOM is ready
+  // Lazy chart init - only create charts when tab is first shown
   requestAnimationFrame(() => {
-    initOverviewCharts();
-    initMarketCharts();
-    initJourneyCharts();
-    initClusterCharts();
-    initAICharts();
-    initStrategyCharts();
+    try { initOverviewCharts(); } catch(e) { console.error('[Chart Error] Overview:', e); }
+    CHARTS_INITIALIZED.add(0);
   });
+}
+
+// ============================================================
+// Auto-computation helpers (Tier 1: derive from existing data)
+// ============================================================
+
+/** Compute brand strength/positioning from ai-sov by_context + search volume */
+function computeBrandProfile(brandName) {
+  const ai = DATA['ai-sov'];
+  const sv = DATA['search-volume'];
+  const trend = DATA['trend'];
+  const brands = getAllBrands();
+  const current = sv?.current?.brands || {};
+  const ctxLabels = { general_recommendation: '일반 추천', kids_furniture: '키즈 가구', living_room: '거실 가구', value_for_money: '가성비' };
+
+  // Find strongest AI context for this brand
+  let bestCtx = null, bestCtxVal = 0;
+  if (ai?.by_context) {
+    Object.entries(ai.by_context).forEach(([ctx, vals]) => {
+      if (vals[brandName] && vals[brandName] > bestCtxVal) {
+        bestCtxVal = vals[brandName];
+        bestCtx = ctxLabels[ctx] || ctx;
+      }
+    });
+  }
+
+  // Search volume rank
+  const sorted = brands.slice().sort((a, b) => (current[b]?.total || 0) - (current[a]?.total || 0));
+  const searchRank = sorted.indexOf(brandName) + 1;
+
+  // Trend direction: compare last 3 months vs prior 3 months
+  let trendDir = '';
+  if (trend?.monthly && trend.monthly.length >= 6) {
+    const recent = trend.monthly.slice(-3);
+    const prior = trend.monthly.slice(-6, -3);
+    const recentAvg = recent.reduce((s, m) => s + (m[brandName] || 0), 0) / 3;
+    const priorAvg = prior.reduce((s, m) => s + (m[brandName] || 0), 0) / 3;
+    const change = ((recentAvg - priorAvg) / priorAvg * 100);
+    trendDir = change > 5 ? '상승세' : change < -5 ? '하락세' : '안정적';
+  }
+
+  // Build strength string
+  const parts = [];
+  if (bestCtx) parts.push(`AI ${bestCtx} ${(bestCtxVal * 100).toFixed(0)}%`);
+  parts.push(`검색량 ${searchRank}위`);
+  if (trendDir) parts.push(`트렌드 ${trendDir}`);
+
+  // Build positioning from SOV + search characteristics
+  const sovScore = ai?.sov_score?.brands?.[brandName] || 0;
+  const positioning = sovScore > 25 ? '시장 리더' : sovScore > 15 ? '주요 경쟁자' : '틈새 플레이어';
+
+  return { strength: parts.join(', '), positioning: positioning };
+}
+
+/** Auto-compute overview insight cards from cross-referenced data */
+function computeOverviewInsights(brands, current, allTotal, sos, gap, ai) {
+  if (!ai) return null;
+  const brandName = CONFIG.brand.name;
+  const rev = DATA['reviews-sentiment'];
+  const clusters = DATA['keyword-clusters']?.clusters || [];
+
+  // STRENGTH: Find contexts where brand is #1
+  const ctxLabels = { general_recommendation: '일반 추천', kids_furniture: '키즈 가구', living_room: '거실 가구', value_for_money: '가성비' };
+  const topContexts = [];
+  if (ai.by_context) {
+    Object.entries(ai.by_context).forEach(([ctx, vals]) => {
+      const sorted = Object.entries(vals).sort((a, b) => b[1] - a[1]);
+      if (sorted[0] && sorted[0][0] === brandName) {
+        topContexts.push({ ctx: ctxLabels[ctx] || ctx, rate: (sorted[0][1] * 100).toFixed(0) });
+      }
+    });
+  }
+
+  let strengthTitle, strengthBody;
+  if (topContexts.length > 0) {
+    strengthTitle = `${topContexts[0].ctx} 리더십`;
+    const ctxList = topContexts.map(c => `${c.ctx} ${c.rate}%`).join(', ');
+    // Find supporting cluster data
+    const kidsCluster = clusters.find(c => c.id === 'kids-parent');
+    const extra = kidsCluster ? ` ${kidsCluster.persona} 클러스터 검색량 ${formatNum(kidsCluster.total_volume)}.` : '';
+    strengthBody = `AI SOV에서 ${ctxList}로 1위.${extra}`;
+  } else {
+    // No #1 context - use best review topic
+    const bestTopic = rev?.by_topic ? Object.entries(rev.by_topic).sort((a, b) => b[1].positive - a[1].positive)[0] : null;
+    strengthTitle = bestTopic ? `${bestTopic[0]} 만족도 우수` : '리뷰 감성 우수';
+    strengthBody = bestTopic ? `${bestTopic[0]} 긍정률 ${(bestTopic[1].positive * 100).toFixed(0)}%, ${bestTopic[1].mention_count}건 분석 기준.` : `전체 긍정률 ${(rev?.overall?.positive * 100 || 0).toFixed(0)}%.`;
+  }
+
+  // WEAKNESS: SOS rank + AI mention gap
+  const mentionRate = ai?.mention_rate?.brands?.[brandName]?.rate || 0;
+  const mentionSorted = Object.entries(ai?.mention_rate?.brands || {}).sort((a, b) => b[1].rate - a[1].rate);
+  const mentionRank = mentionSorted.findIndex(([n]) => n === brandName) + 1;
+  const weaknessTitle = '검색 점유율 열위';
+  const weaknessBody = `SOS ${sos}%로 1위 대비 ${gap}%p 차이. AI 언급률 ${(mentionRate * 100).toFixed(0)}%로 ${mentionRank}위.`;
+
+  // OPPORTUNITY: Find growing clusters or underserved contexts
+  const growingCluster = clusters.sort((a, b) => b.total_volume - a.total_volume)
+    .find(c => c.id !== 'newlyweds' && c.id !== 'kids-parent'); // Find non-dominant cluster
+  let oppTitle, oppBody;
+  if (growingCluster) {
+    oppTitle = `${growingCluster.persona} 시장`;
+    oppBody = `${growingCluster.persona} 클러스터 검색량 ${formatNum(growingCluster.total_volume)}, 점유율 ${(growingCluster.share * 100).toFixed(0)}%. 차별화 전략으로 시장 진입 가능.`;
+  } else {
+    oppTitle = '신규 시장 기회';
+    oppBody = '클러스터 분석 데이터를 기반으로 미개척 시장 탐색 필요.';
+  }
+
+  return {
+    strength: { title: strengthTitle, body: strengthBody },
+    weakness: { title: weaknessTitle, body: weaknessBody },
+    opportunity: { title: oppTitle, body: oppBody }
+  };
+}
+
+/** Auto-generate search path examples from exit_signals */
+function computePathExamples() {
+  const j = DATA['consumer-journey'];
+  if (!j?.stages?.consideration?.exit_signals?.competitors) return [];
+
+  const exitSignals = j.stages.consideration.exit_signals.competitors;
+  const brandName = CONFIG.brand.name;
+  const paths = [];
+
+  // Generate exit paths from competitor data
+  Object.entries(exitSignals)
+    .filter(([name]) => name !== '기타')
+    .sort((a, b) => b[1].share - a[1].share)
+    .forEach(([name, data]) => {
+      // Use sample keywords to build realistic path
+      const sample = data.sample || [];
+      const competitorProduct = sample.length > 1 ? sample[1] : sample[0] || name;
+      // Extract product category from competitor keyword (remove brand name)
+      let category = competitorProduct.replace(name, '').trim();
+      if (!category) category = '가구';
+      paths.push({
+        type: 'exit',
+        from: `${brandName} ${category}`,
+        to: competitorProduct,
+        competitor: name,
+        share: data.share
+      });
+    });
+
+  // Add entry paths from awareness keywords (top brand-related keywords)
+  const awarenessKws = j.stages?.awareness?.sample_keywords || [];
+  const considerationKws = j.stages?.consideration?.sample_keywords || [];
+  const brandKws = considerationKws.filter(k => k.keyword.includes(brandName));
+
+  if (awarenessKws.length > 0 && brandKws.length > 0) {
+    // Pick a generic awareness keyword and a brand consideration keyword
+    const genericKw = awarenessKws.find(k => !getAllBrands().some(b => k.keyword.includes(b)));
+    if (genericKw && brandKws[0]) {
+      paths.push({
+        type: 'entry',
+        from: genericKw.keyword,
+        to: brandKws[0].keyword,
+        stage: '인지 → 비교'
+      });
+    }
+  }
+
+  return paths;
+}
+
+/** Auto-generate action plan from AI SOV gap analysis */
+function computeActionPlan() {
+  const ai = DATA['ai-sov'];
+  if (!ai?.by_context) return [];
+
+  const brandName = CONFIG.brand.name;
+  const ctxLabels = { general_recommendation: '일반 추천', kids_furniture: '키즈 가구', living_room: '거실 가구', value_for_money: '가성비' };
+
+  // Calculate gap for each context
+  const gaps = Object.entries(ai.by_context).map(([ctx, vals]) => {
+    const sorted = Object.entries(vals).sort((a, b) => b[1] - a[1]);
+    const myRate = vals[brandName] || 0;
+    const topEntry = sorted[0] || ['', 0];
+    const topRate = topEntry[1];
+    const topBrand = topEntry[0];
+    return {
+      ctx,
+      label: ctxLabels[ctx] || ctx,
+      myRate,
+      topBrand,
+      topRate,
+      gap: topRate - myRate,
+      rank: sorted.findIndex(([n]) => n === brandName) + 1
+    };
+  }).filter(g => g.gap > 0).sort((a, b) => b.gap - a.gap);
+
+  // Generate action items from gaps
+  return gaps.slice(0, 3).map((g, i) => ({
+    step: i + 1,
+    priority: g.gap > 0.3 ? 'high' : 'medium',
+    title: `${g.label} AI 콘텐츠 강화`,
+    description: `${g.label} 언급률 ${(g.myRate * 100).toFixed(0)}%로 ${g.topBrand}(${(g.topRate * 100).toFixed(0)}%) 대비 열위. 구조화 데이터 최적화 필요.`,
+    metric: `${g.label} 언급률 ${(g.myRate * 100).toFixed(0)}% → ${Math.min((g.myRate * 100 + g.gap * 50), g.topRate * 100).toFixed(0)}%`
+  }));
+}
+
+/** Auto-compute market seasonality insights from trend data */
+function computeSeasonalityInsights() {
+  const trend = DATA['trend'];
+  const brandName = CONFIG.brand.name;
+  if (!trend?.seasonality?.[brandName]) return null;
+
+  const seasonData = trend.seasonality[brandName];
+  const months = Object.entries(seasonData).sort((a, b) => b[1] - a[1]);
+  const monthNames = { '1': '1월', '2': '2월', '3': '3월', '4': '4월', '5': '5월', '6': '6월', '7': '7월', '8': '8월', '9': '9월', '10': '10월', '11': '11월', '12': '12월' };
+
+  const peakMonths = months.filter(([_, v]) => v >= 110);
+  const lowMonths = months.filter(([_, v]) => v <= 92);
+  const avgIndex = Object.values(seasonData).reduce((s, v) => s + v, 0) / 12;
+
+  const strength = peakMonths.length > 0
+    ? `${peakMonths.map(([m]) => monthNames[m]).join(', ')} 시즌에 검색량 급증 (지수 ${peakMonths[0][1].toFixed(0)}). 시즌 마케팅 타이밍 확보.`
+    : '연중 안정적 검색 패턴 유지.';
+
+  const weakness = lowMonths.length > 0
+    ? `${lowMonths.map(([m]) => monthNames[m]).join(', ')} 비수기 검색량 감소 (지수 ${lowMonths[lowMonths.length - 1][1].toFixed(0)}). 비수기 프로모션 필요.`
+    : '뚜렷한 비수기 없음.';
+
+  // Opportunity: find recovery months (low followed by high)
+  const monthNums = Object.keys(seasonData).map(Number).sort((a, b) => a - b);
+  let recoveryNote = '시즌별 트렌드 분석으로 마케팅 최적화 가능.';
+  for (let i = 1; i < monthNums.length; i++) {
+    const prev = seasonData[String(monthNums[i - 1])];
+    const curr = seasonData[String(monthNums[i])];
+    if (prev <= 95 && curr >= 105) {
+      recoveryNote = `${monthNames[String(monthNums[i - 1])]} 비수기 후 ${monthNames[String(monthNums[i])]} 반등 구간 활용 가능.`;
+      break;
+    }
+  }
+
+  return { strength, weakness, opportunity: recoveryNote };
 }
 
 // ============================================================
@@ -585,7 +1101,7 @@ function renderDashboard() {
 function renderOverview() {
   const sv = DATA['search-volume'];
   const brands = getAllBrands();
-  const current = sv.current.brands;
+  const current = sv?.current?.brands || {};
   const brandTotal = current[CONFIG.brand.name]?.total || 0;
   const allTotal = brands.reduce((s, b) => s + (current[b]?.total || 0), 0);
   const sos = ((brandTotal / allTotal) * 100).toFixed(1);
@@ -604,6 +1120,33 @@ function renderOverview() {
 
   const rev = DATA['reviews-sentiment'];
   const sentScore = rev?.overall?.sentiment_score || '-';
+
+  // Auto-computed insights from cross-referenced data
+  const ai = DATA['ai-sov'];
+  const topBrand = brands.slice().sort((a, b) => (current[b]?.total || 0) - (current[a]?.total || 0))[0];
+  const topTotal = current[topBrand]?.total || 0;
+  const gap = ((topTotal / allTotal) * 100 - parseFloat(sos)).toFixed(1);
+
+  const autoInsights = computeOverviewInsights(brands, current, allTotal, sos, gap, ai);
+  const insightCards = autoInsights ? `
+    <div class="grid-3">
+      <div class="insight-card strength">
+        <div class="insight-type">Strength</div>
+        <div style="font-family:var(--font-serif);font-size:14px;font-weight:600;color:var(--text-on-dark);margin-bottom:4px">${autoInsights.strength.title}</div>
+        <div class="insight-text">${autoInsights.strength.body}</div>
+      </div>
+      <div class="insight-card weakness">
+        <div class="insight-type">Weakness</div>
+        <div style="font-family:var(--font-serif);font-size:14px;font-weight:600;color:var(--text-on-dark);margin-bottom:4px">${autoInsights.weakness.title}</div>
+        <div class="insight-text">${autoInsights.weakness.body}</div>
+      </div>
+      <div class="insight-card opportunity">
+        <div class="insight-type">Opportunity</div>
+        <div style="font-family:var(--font-serif);font-size:14px;font-weight:600;color:var(--text-on-dark);margin-bottom:4px">${autoInsights.opportunity.title}</div>
+        <div class="insight-text">${autoInsights.opportunity.body}</div>
+      </div>
+    </div>
+  ` : '';
 
   return `
     <div class="grid-4">
@@ -628,6 +1171,8 @@ function renderOverview() {
         <div class="kpi-sub">긍정 ${(rev?.overall?.positive * 100 || 0).toFixed(0)}% / 부정 ${(rev?.overall?.negative * 100 || 0).toFixed(0)}%</div>
       </div>
     </div>
+
+    ${insightCards}
 
     <div class="grid-2">
       <div class="card">
@@ -680,7 +1225,7 @@ function renderOverview() {
 function initOverviewCharts() {
   const sv = DATA['search-volume'];
   const brands = getAllBrands();
-  const current = sv.current.brands;
+  const current = sv?.current?.brands || {};
 
   // SOS Doughnut
   new Chart(document.getElementById('chart-sos'), {
@@ -696,7 +1241,7 @@ function initOverviewCharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'right', labels: { color: '#8888a0', padding: 12, font: { size: 12 } } },
+        legend: { position: 'right' },
         tooltip: {
           callbacks: {
             label: (ctx) => {
@@ -728,8 +1273,8 @@ function initOverviewCharts() {
         tooltip: { callbacks: { label: ctx => formatNum(ctx.raw) } }
       },
       scales: {
-        x: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
-        y: { ticks: { color: '#e8e8ed' }, grid: { display: false } }
+        x: { ticks: { callback: v => formatNum(v) } },
+        y: { grid: { display: false } }
       }
     }
   });
@@ -742,14 +1287,14 @@ function initOverviewCharts() {
       labels: ['Female', 'Male'],
       datasets: [{
         data: [demo.gender.female * 100, demo.gender.male * 100],
-        backgroundColor: ['#ec4899', '#3b82f6'],
+        backgroundColor: CHART_THEME.genderColors,
         borderWidth: 0
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'bottom', labels: { color: '#8888a0', font: { size: 12 } } },
+        legend: { position: 'bottom' },
         tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw.toFixed(0) + '%' } }
       }
     }
@@ -763,7 +1308,7 @@ function initOverviewCharts() {
       labels: ageLabels,
       datasets: [{
         data: ageLabels.map(k => demo.age[k] * 100),
-        backgroundColor: '#9333ea',
+        backgroundColor: CHART_THEME.ageColor,
         borderRadius: 6
       }]
     },
@@ -771,8 +1316,8 @@ function initOverviewCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
-        x: { ticks: { color: '#8888a0' }, grid: { display: false } }
+        y: { ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false } }
       }
     }
   });
@@ -783,6 +1328,58 @@ function initOverviewCharts() {
 // ============================================================
 function renderMarket() {
   const trend = DATA['trend'];
+  const sv = DATA['search-volume'];
+  const brands = getAllBrands();
+  const current = sv?.current?.brands || {};
+  const allTotal = brands.reduce((s, b) => s + (current[b]?.total || 0), 0);
+
+  // Competitor positioning table (auto-computed from data)
+  const sortedBrands = brands.slice().sort((a, b) => (current[b]?.total || 0) - (current[a]?.total || 0));
+  const compTableRows = sortedBrands.map((b, i) => {
+    const d = current[b] || {};
+    const bsos = ((d.total / allTotal) * 100).toFixed(1);
+    const prof = computeBrandProfile(b);
+    // YoY calc
+    const hist = sv.historical || [];
+    const curDate = sv.current.date.split('-');
+    const lyEntry = hist.find(h => h.date === `${parseInt(curDate[0])-1}-${curDate[1]}`);
+    const lyTotal = lyEntry?.brands?.[b]?.total;
+    const yoyVal = lyTotal ? (((d.total - lyTotal) / lyTotal) * 100).toFixed(1) : null;
+    return `<tr>
+      <td class="rank">${i + 1}</td>
+      <td><span class="brand-dot" style="background:${getBrandColor(b)}"></span>${b}</td>
+      <td>${formatNum(d.total || 0)}</td>
+      <td>${bsos}%</td>
+      <td style="color:${yoyVal > 0 ? 'var(--positive)' : yoyVal < 0 ? 'var(--negative)' : 'var(--text-on-dark-secondary)'}">${yoyVal !== null ? (yoyVal > 0 ? '+' : '') + yoyVal + '%' : '-'}</td>
+      <td style="color:var(--text-on-dark-secondary)">${prof.strength || '-'}</td>
+      <td style="color:var(--text-on-dark-secondary)">${prof.positioning || '-'}</td>
+    </tr>`;
+  }).join('');
+
+  // Yearly summary table
+  const hist = sv.historical || [];
+  const yearGroups = {};
+  hist.forEach(h => {
+    const year = h.date.split('-')[0];
+    if (!yearGroups[year]) yearGroups[year] = [];
+    yearGroups[year].push(h);
+  });
+  const yearRows = Object.entries(yearGroups).sort((a, b) => a[0] - b[0]).map(([year, months]) => {
+    const brandYearTotal = months.reduce((s, m) => s + (m.brands[CONFIG.brand.name]?.total || 0), 0);
+    const brandMonthAvg = Math.round(brandYearTotal / months.length);
+    const allBrandsTotal = months.reduce((s, m) => {
+      return s + brands.reduce((bs, b) => bs + (m.brands[b]?.total || 0), 0);
+    }, 0);
+    const yearSos = allBrandsTotal > 0 ? ((brandYearTotal / allBrandsTotal) * 100).toFixed(1) : '-';
+    return `<tr>
+      <td>${year}</td>
+      <td>${months.length}개월</td>
+      <td>${formatNum(brandYearTotal)}</td>
+      <td>${formatNum(brandMonthAvg)}</td>
+      <td>${yearSos}%</td>
+    </tr>`;
+  }).join('');
+
   return `
     <div class="grid-1">
       <div class="card">
@@ -800,20 +1397,45 @@ function renderMarket() {
         <div class="chart-container"><canvas id="chart-season"></canvas></div>
       </div>
     </div>
-    <div class="grid-3">
-      <div class="insight-card strength">
-        <div class="insight-type">Strength</div>
-        <div class="insight-text">신학기(1월)와 연말(12월) 시즌에 검색량 급증. 시즌 마케팅 타이밍 확보.</div>
-      </div>
-      <div class="insight-card weakness">
-        <div class="insight-type">Weakness</div>
-        <div class="insight-text">6월 비수기 검색량 급감(연평균 대비 -12%). 비수기 프로모션 필요.</div>
-      </div>
-      <div class="insight-card opportunity">
-        <div class="insight-type">Opportunity</div>
-        <div class="insight-text">이사철(7-8월) 검색량 반등 구간에서 경쟁사 대비 회복 속도 빠름.</div>
-      </div>
+
+    <div class="section-title">경쟁사 포지셔닝 비교</div>
+    <div class="card" style="margin-bottom:24px">
+      <table class="data-table">
+        <thead><tr>
+          <th>순위</th><th>브랜드</th><th>검색량</th><th>SOS</th><th>YoY</th><th>강점</th><th>포지셔닝</th>
+        </tr></thead>
+        <tbody>${compTableRows}</tbody>
+      </table>
     </div>
+
+    <div class="section-title">연도별 추이 요약 (${CONFIG.brand.name})</div>
+    <div class="card" style="margin-bottom:24px">
+      <table class="data-table">
+        <thead><tr>
+          <th>연도</th><th>데이터</th><th>연간 합계</th><th>월평균</th><th>SOS</th>
+        </tr></thead>
+        <tbody>${yearRows}</tbody>
+      </table>
+    </div>
+
+    ${(() => {
+      const si = computeSeasonalityInsights();
+      if (!si) return '';
+      return `<div class="grid-3">
+        <div class="insight-card strength">
+          <div class="insight-type">Strength</div>
+          <div class="insight-text">${si.strength}</div>
+        </div>
+        <div class="insight-card weakness">
+          <div class="insight-type">Weakness</div>
+          <div class="insight-text">${si.weakness}</div>
+        </div>
+        <div class="insight-card opportunity">
+          <div class="insight-type">Opportunity</div>
+          <div class="insight-text">${si.opportunity}</div>
+        </div>
+      </div>`;
+    })()}
   `;
 }
 
@@ -840,12 +1462,11 @@ function initMarketCharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top', labels: { color: '#8888a0', usePointStyle: true, padding: 16 } }
+        legend: { position: 'top', labels: { usePointStyle: true, padding: 16 } }
       },
       scales: {
-        y: { ticks: { color: '#555570' }, grid: { color: '#2a2a3a' },
-          title: { display: true, text: '상대 검색지수', color: '#555570' } },
-        x: { ticks: { color: '#555570', maxRotation: 45 }, grid: { display: false } }
+        y: { title: { display: true, text: '상대 검색지수' } },
+        x: { ticks: { maxRotation: 45 }, grid: { display: false } }
       }
     }
   });
@@ -869,8 +1490,8 @@ function initMarketCharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
-        x: { ticks: { color: '#555570', maxRotation: 45 }, grid: { display: false } }
+        y: { ticks: { callback: v => formatNum(v) } },
+        x: { ticks: { maxRotation: 45 }, grid: { display: false } }
       }
     }
   });
@@ -886,7 +1507,7 @@ function initMarketCharts() {
       labels: monthNames,
       datasets: [{
         data: vals,
-        backgroundColor: vals.map(v => v >= 110 ? '#22c55e' : v <= 92 ? '#ef4444' : '#6b7280'),
+        backgroundColor: vals.map(v => v >= 110 ? CHART_THEME.semantic.positive : v <= 92 ? CHART_THEME.semantic.negative : CHART_THEME.semantic.neutral),
         borderRadius: 4
       }]
     },
@@ -897,11 +1518,8 @@ function initMarketCharts() {
         tooltip: { callbacks: { label: ctx => '지수: ' + ctx.raw } }
       },
       scales: {
-        y: {
-          ticks: { color: '#555570' }, grid: { color: '#2a2a3a' },
-          title: { display: true, text: '계절 지수 (100=평균)', color: '#555570' }
-        },
-        x: { ticks: { color: '#555570' }, grid: { display: false } }
+        y: { title: { display: true, text: '계절 지수 (100=평균)' } },
+        x: { grid: { display: false } }
       }
     }
   });
@@ -965,7 +1583,7 @@ function renderJourney() {
       <div class="card">
         <div class="card-title">추정 이탈 방향 (비교 키워드 경쟁사 언급)</div>
         <div style="padding: 8px 0">${exitBars}</div>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:8px; padding:8px; background:var(--bg-secondary); border-radius:6px;">
+        <div style="font-size:11px; color:var(--text-on-dark-muted); margin-top:8px; padding:8px; background:var(--bg-dark); border-radius:6px;">
           * GA 없이 실제 이탈률 측정 불가. '비교 키워드 내 경쟁사 언급 빈도' 기반 추정 이탈 경향.
         </div>
       </div>
@@ -985,6 +1603,26 @@ function renderJourney() {
         </div>`;
       }).join('')}
     </div>
+
+    ${(() => {
+      const paths = computePathExamples();
+      if (!paths.length) return '';
+      return `
+      <div class="section-title">검색 경로 예시 (Search Path Examples)</div>
+      <div class="grid-1">
+        ${paths.map(p => `
+          <div class="path-example ${p.type}">
+            <span class="path-badge ${p.type}">${p.type === 'exit' ? '이탈' : '유입'}</span>
+            <div class="path-flow">
+              <span class="path-node">${p.from}</span>
+              <span class="path-arrow">&rarr;</span>
+              <span class="path-node">${p.to}</span>
+            </div>
+            <span class="path-share">${p.share ? (p.share * 100).toFixed(0) + '%' : p.stage || ''}</span>
+          </div>
+        `).join('')}
+      </div>`;
+    })()}
   `;
 }
 
@@ -999,7 +1637,7 @@ function initJourneyCharts() {
       datasets: [{
         label: '검색량',
         data: [stages.awareness.total_volume, stages.consideration.total_volume, stages.conversion.total_volume],
-        backgroundColor: ['#3b82f6', '#00d4ff', '#9333ea'],
+        backgroundColor: CHART_THEME.funnelColors,
         borderRadius: 6
       }]
     },
@@ -1010,8 +1648,8 @@ function initJourneyCharts() {
         tooltip: { callbacks: { label: ctx => formatNum(ctx.raw) } }
       },
       scales: {
-        y: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
-        x: { ticks: { color: '#8888a0' }, grid: { display: false } }
+        y: { ticks: { callback: v => formatNum(v) } },
+        x: { grid: { display: false } }
       }
     }
   });
@@ -1025,7 +1663,7 @@ function renderClusters() {
   const clusters = cl.clusters;
 
   const clusterCards = clusters.map((c, i) => `
-    <div class="cluster-card" style="border-left-color:${c.color}">
+    <div class="cluster-card" style="border-left-color:${CHART_THEME.clusterColors[i % CHART_THEME.clusterColors.length]}">
       <div class="cluster-header">
         <div class="cluster-persona">${c.persona}</div>
         <div class="cluster-share">${(c.share * 100).toFixed(0)}%</div>
@@ -1034,7 +1672,7 @@ function renderClusters() {
       <div class="cluster-tags">
         ${c.top_keywords.slice(0, 5).map(k => `<span class="cluster-tag">${k.keyword}</span>`).join('')}
       </div>
-      <div style="font-size:13px; color:var(--text-secondary)">
+      <div style="font-size:13px; color:var(--text-on-dark-secondary)">
         ${c.keyword_count}개 키워드 / 총 검색량 ${formatNum(c.total_volume)}
       </div>
       <button class="toggle-btn" onclick="toggleCluster(this, ${i})">상세 보기</button>
@@ -1047,6 +1685,16 @@ function renderClusters() {
     </div>
   `).join('');
 
+  // Marketing strategy table
+  const strategyRows = clusters
+    .filter(c => c.marketing_strategy)
+    .map((c, i) => `<tr>
+      <td><span class="brand-dot" style="background:${CHART_THEME.clusterColors[i % CHART_THEME.clusterColors.length]}"></span>${c.persona}</td>
+      <td style="color:var(--text-on-dark-secondary)">${c.marketing_strategy.channel}</td>
+      <td style="color:var(--text-on-dark-secondary)">${c.marketing_strategy.message}</td>
+      <td style="color:var(--text-on-dark-secondary)">${c.marketing_strategy.goal}</td>
+    </tr>`).join('');
+
   return `
     <div class="grid-2">
       <div class="card">
@@ -1058,6 +1706,19 @@ function renderClusters() {
         <div class="chart-container"><canvas id="chart-cluster-bar"></canvas></div>
       </div>
     </div>
+
+    ${strategyRows ? `
+    <div class="section-title">클러스터별 마케팅 전략</div>
+    <div class="card" style="margin-bottom:24px">
+      <table class="data-table">
+        <thead><tr>
+          <th>페르소나</th><th>추천 채널</th><th>핵심 메시지</th><th>마케팅 목표</th>
+        </tr></thead>
+        <tbody>${strategyRows}</tbody>
+      </table>
+    </div>
+    ` : ''}
+
     <div class="section-title">페르소나별 상세</div>
     <div class="grid-2">
       ${clusterCards}
@@ -1081,14 +1742,14 @@ function initClusterCharts() {
       labels: clusters.map(c => c.persona),
       datasets: [{
         data: clusters.map(c => c.total_volume),
-        backgroundColor: clusters.map(c => c.color),
+        backgroundColor: clusters.map((c, i) => CHART_THEME.clusterColors[i % CHART_THEME.clusterColors.length]),
         borderWidth: 0
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'right', labels: { color: '#8888a0', padding: 10, font: { size: 11 } } },
+        legend: { position: 'right' },
         tooltip: { callbacks: { label: ctx => `${ctx.label}: ${formatNum(ctx.raw)} (${(ctx.raw / clusters.reduce((s,c)=>s+c.total_volume,0)*100).toFixed(1)}%)` } }
       }
     }
@@ -1100,7 +1761,7 @@ function initClusterCharts() {
       labels: clusters.map(c => c.persona),
       datasets: [{
         data: clusters.map(c => c.total_volume),
-        backgroundColor: clusters.map(c => c.color),
+        backgroundColor: clusters.map((c, i) => CHART_THEME.clusterColors[i % CHART_THEME.clusterColors.length]),
         borderRadius: 6
       }]
     },
@@ -1111,8 +1772,8 @@ function initClusterCharts() {
         tooltip: { callbacks: { label: ctx => formatNum(ctx.raw) } }
       },
       scales: {
-        x: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
-        y: { ticks: { color: '#e8e8ed', font: { size: 11 } }, grid: { display: false } }
+        x: { ticks: { callback: v => formatNum(v) } },
+        y: { grid: { display: false } }
       }
     }
   });
@@ -1146,9 +1807,64 @@ function renderAI() {
       <td>${d.count}</td>
       <td>${d.avg_rating}</td>
       <td><span style="color:${d.sentiment_score >= 50 ? 'var(--positive)' : d.sentiment_score >= 30 ? 'var(--high)' : 'var(--negative)'}">${d.sentiment_score}</span></td>
-      <td style="color:var(--text-secondary)">${d.top_issue}</td>
+      <td style="color:var(--text-on-dark-secondary)">${d.top_issue || '-'}</td>
     </tr>
   `).join('');
+
+  // Alert box: auto-calculate from mention_rate
+  const mentionBrands = Object.entries(ai.mention_rate.brands)
+    .sort((a, b) => b[1].rate - a[1].rate);
+  const myMention = ai.mention_rate.brands[CONFIG.brand.name];
+  const myRate = (myMention.rate * 100).toFixed(0);
+  // Filter out own brand to get competitors who mention more
+  const aboveMe = mentionBrands.filter(([name]) => name !== CONFIG.brand.name && ai.mention_rate.brands[name].rate > myMention.rate);
+  const top1 = aboveMe[0] || mentionBrands[0];
+  const top2 = aboveMe[1] || null;
+
+  // Competitor positioning table
+  const posBrands = Object.entries(ai.mention_rate.brands)
+    .sort((a, b) => b[1].rate - a[1].rate);
+  const posTableRows = posBrands.map(([name, d], i) => {
+    const firstRec = ai.first_recommendation.brands[name];
+    const sovScore = ai.sov_score.brands[name] || 0;
+    // Find strongest context
+    let bestCtx = '-';
+    let bestCtxVal = 0;
+    const ctxLabels = { general_recommendation: '일반 추천', kids_furniture: '키즈 가구', living_room: '거실 가구', value_for_money: '가성비' };
+    Object.entries(ai.by_context).forEach(([ctx, vals]) => {
+      if (vals[name] && vals[name] > bestCtxVal) {
+        bestCtxVal = vals[name];
+        bestCtx = ctxLabels[ctx] || ctx;
+      }
+    });
+    return `<tr>
+      <td class="rank">${i + 1}</td>
+      <td><span class="brand-dot" style="background:${getBrandColor(name)}"></span>${name}</td>
+      <td>${(d.rate * 100).toFixed(0)}%</td>
+      <td>${firstRec ? (firstRec.rate * 100).toFixed(0) + '%' : '-'}</td>
+      <td>${sovScore.toFixed(1)}%</td>
+      <td style="color:var(--text-on-dark-secondary)">${bestCtx} (${(bestCtxVal * 100).toFixed(0)}%)</td>
+    </tr>`;
+  }).join('');
+
+  // Action plan (auto-computed from by_context gap analysis)
+  const actionPlan = computeActionPlan();
+  const actionPlanHtml = actionPlan.length > 0 ? `
+    <div class="section-title">AI 대응 3단계 액션 플랜</div>
+    <div class="action-steps">
+      ${actionPlan.map(a => `
+        <div class="action-step">
+          <div class="step-badge">${a.step}</div>
+          <div class="step-content">
+            <div class="step-title">${a.title}</div>
+            <div class="step-desc">${a.description}</div>
+            <div class="step-metric">${a.metric}</div>
+          </div>
+          <span class="step-priority ${a.priority}">${a.priority}</span>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
 
   return `
     <div class="grid-4">
@@ -1174,6 +1890,15 @@ function renderAI() {
       </div>
     </div>
 
+    <div class="alert-box">
+      <div class="alert-title">AI 핵심 발견</div>
+      <div class="alert-body">
+        AI가 <strong>${top1[0]}</strong>(${(top1[1].rate * 100).toFixed(0)}%)${top2 ? `, <strong>${top2[0]}</strong>(${(top2[1].rate * 100).toFixed(0)}%)` : ''}를
+        <strong>${CONFIG.brand.name}</strong>(${myRate}%)보다 더 자주 언급합니다.
+        AI SOV ${ai.sov_score.brands[CONFIG.brand.name]}%로 1위(${top1[0]} ${ai.sov_score.brands[top1[0]]}%) 대비 ${(ai.sov_score.brands[top1[0]] - ai.sov_score.brands[CONFIG.brand.name]).toFixed(1)}%p 차이.
+      </div>
+    </div>
+
     <div class="grid-2">
       <div class="card">
         <div class="card-title">AI 브랜드 언급률 비교</div>
@@ -1196,12 +1921,24 @@ function renderAI() {
       </div>
     </div>
 
+    <div class="section-title">AI 경쟁사 포지셔닝</div>
+    <div class="card" style="margin-bottom:24px">
+      <table class="data-table">
+        <thead><tr>
+          <th>순위</th><th>브랜드</th><th>언급률</th><th>1순위 추천</th><th>AI SOV</th><th>최강 카테고리</th>
+        </tr></thead>
+        <tbody>${posTableRows}</tbody>
+      </table>
+    </div>
+
+    ${actionPlanHtml}
+
     <div class="section-title">리뷰 감성분석 (${rev.meta.period})</div>
     <div class="grid-2">
       <div class="card">
         <div class="card-title">토픽별 감성 분포</div>
         ${sentimentBars}
-        <div style="display:flex; gap:16px; margin-top:12px; font-size:11px; color:var(--text-muted)">
+        <div style="display:flex; gap:16px; margin-top:12px; font-size:11px; color:var(--text-on-dark-muted)">
           <span><span style="display:inline-block;width:10px;height:10px;background:var(--positive);border-radius:2px;margin-right:4px"></span>긍정</span>
           <span><span style="display:inline-block;width:10px;height:10px;background:var(--neutral);border-radius:2px;margin-right:4px"></span>중립</span>
           <span><span style="display:inline-block;width:10px;height:10px;background:var(--negative);border-radius:2px;margin-right:4px"></span>부정</span>
@@ -1249,8 +1986,8 @@ function initAICharts() {
         tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(0) + '%' } }
       },
       scales: {
-        x: { max: 100, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
-        y: { ticks: { color: '#e8e8ed' }, grid: { display: false } }
+        x: { max: 100, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
       }
     }
   });
@@ -1276,8 +2013,8 @@ function initAICharts() {
         tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(0) + '%' } }
       },
       scales: {
-        x: { max: 50, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
-        y: { ticks: { color: '#e8e8ed' }, grid: { display: false } }
+        x: { max: 50, ticks: { callback: v => v + '%' } },
+        y: { grid: { display: false } }
       }
     }
   });
@@ -1299,8 +2036,8 @@ function initAICharts() {
       responsive: true, maintainAspectRatio: false,
       plugins: { legend: { display: false } },
       scales: {
-        y: { max: 100, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
-        x: { ticks: { color: '#8888a0' }, grid: { display: false } }
+        y: { max: 100, ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false } }
       }
     }
   });
@@ -1319,14 +2056,15 @@ function initAICharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'right', labels: { color: '#8888a0', padding: 10 } },
+        legend: { position: 'right' },
         tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw.toFixed(1) + '%' } }
       }
     }
   });
 
   // Sentiment trend
-  const st = rev.monthly_trend;
+  const st = rev?.monthly_trend || [];
+  if (!st.length) return;
   new Chart(document.getElementById('chart-sentiment-trend'), {
     type: 'line',
     data: {
@@ -1335,13 +2073,15 @@ function initAICharts() {
         {
           label: '긍정',
           data: st.map(d => d.positive * 100),
-          borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)',
+          borderColor: CHART_THEME.semantic.positive,
+          backgroundColor: themeColorAlpha(CHART_THEME.semantic.positive, 0.3),
           fill: true, tension: 0.3, borderWidth: 2
         },
         {
           label: '부정',
           data: st.map(d => d.negative * 100),
-          borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)',
+          borderColor: CHART_THEME.semantic.negative,
+          backgroundColor: themeColorAlpha(CHART_THEME.semantic.negative, 0.3),
           fill: true, tension: 0.3, borderWidth: 2
         }
       ]
@@ -1349,11 +2089,11 @@ function initAICharts() {
     options: {
       responsive: true, maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top', labels: { color: '#8888a0', usePointStyle: true } }
+        legend: { position: 'top', labels: { usePointStyle: true } }
       },
       scales: {
-        y: { max: 100, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
-        x: { ticks: { color: '#555570' }, grid: { display: false } }
+        y: { max: 100, ticks: { callback: v => v + '%' } },
+        x: { grid: { display: false } }
       }
     }
   });
@@ -1386,12 +2126,12 @@ function renderStrategy() {
       </div>
       <button class="toggle-btn" onclick="toggleStrategy(this, ${i})">상세 보기</button>
       <div class="strategy-detail" id="strategy-detail-${i}">
-        <h4 style="font-size:12px; color:var(--text-muted); margin-bottom:8px">Action Items</h4>
-        ${item.actions.map(a => `<div class="action-item">${a}</div>`).join('')}
+        <h4 style="font-size:12px; color:var(--text-on-dark-muted); margin-bottom:8px">Action Items</h4>
+        ${item.actions.map(a => `<label class="checklist-item"><input type="checkbox"><span>${a}</span></label>`).join('')}
         <div class="strategy-expected">
           <strong>Expected Impact:</strong> ${item.expected_impact}
         </div>
-        <div style="font-size:11px; color:var(--text-muted); margin-top:8px">
+        <div style="font-size:11px; color:var(--text-on-dark-muted); margin-top:8px">
           Data basis: ${item.data_basis}
         </div>
       </div>
@@ -1439,18 +2179,24 @@ function filterStrategy(priority, btn) {
 
 function initStrategyCharts() {
   const st = DATA['strategy-matrix'];
+  if (!st || !st.matrix_items) return;
   const items = st.matrix_items;
-  const priorityColors = { critical: '#ef4444', high: '#f97316', medium: '#22c55e' };
-
-  new Chart(document.getElementById('chart-matrix'), {
+  const canvas = document.getElementById('chart-matrix');
+  if (!canvas) return;
+  const pColors = { critical: '#D45D5D', high: '#C4956A', medium: '#6B8F71' };
+  const tickColor = 'rgba(243,242,237,0.5)';
+  const gridColor = 'rgba(243,242,237,0.12)';
+  new Chart(canvas, {
     type: 'scatter',
     data: {
       datasets: items.map(item => ({
         label: item.label,
         data: [{ x: item.feasibility, y: item.impact }],
-        backgroundColor: priorityColors[item.priority] || '#888',
+        backgroundColor: pColors[item.priority] || '#888',
+        borderColor: pColors[item.priority] || '#888',
         pointRadius: 12,
-        pointHoverRadius: 16
+        pointHoverRadius: 16,
+        borderWidth: 2
       }))
     },
     options: {
@@ -1465,14 +2211,18 @@ function initStrategyCharts() {
       },
       scales: {
         x: {
+          type: 'linear',
           min: 40, max: 100,
-          title: { display: true, text: 'Feasibility (실행 용이성)', color: '#555570' },
-          ticks: { color: '#555570' }, grid: { color: '#2a2a3a' }
+          title: { display: true, text: 'Feasibility (실행 용이성)', color: tickColor },
+          ticks: { color: tickColor },
+          grid: { color: gridColor }
         },
         y: {
+          type: 'linear',
           min: 50, max: 100,
-          title: { display: true, text: 'Impact (영향도)', color: '#555570' },
-          ticks: { color: '#555570' }, grid: { color: '#2a2a3a' }
+          title: { display: true, text: 'Impact (영향도)', color: tickColor },
+          ticks: { color: tickColor },
+          grid: { color: gridColor }
         }
       }
     }

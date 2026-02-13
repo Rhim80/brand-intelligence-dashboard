@@ -1,73 +1,355 @@
 {
   "meta": {
-    "source": "네이버 브랜드스토어 리뷰 크롤링 + Claude 감성분석",
+    "source": "네이버 브랜드스토어 리뷰 크롤링 + Gemini 2.0 Flash 감성분석",
     "collected_at": "2026-02",
-    "total_reviews": 842,
-    "period": "2025-09 ~ 2026-02 (6개월)",
-    "products_covered": ["책상", "소파", "침대", "수납", "조명"]
+    "total_reviews": 1500,
+    "csv_source": "iloom_all_reviews.csv",
+    "period": "2024-08 ~ 2026-02"
   },
   "overall": {
-    "positive": 0.64,
-    "neutral": 0.18,
-    "negative": 0.18,
-    "avg_rating": 4.1,
-    "sentiment_score": 46
+    "positive": 0.89,
+    "neutral": 0.07,
+    "negative": 0.04,
+    "avg_rating": 4.9,
+    "sentiment_score": 86
   },
   "by_topic": {
     "품질": {
-      "positive": 0.72,
-      "neutral": 0.12,
-      "negative": 0.16,
-      "mention_count": 324,
-      "sample_positive": ["소재가 튼튼해요", "오래 써도 문제 없어요", "마감이 깔끔해요"],
-      "sample_negative": ["수평이 안 맞아요", "칠이 벗겨졌어요", "나사가 헐거워요"]
+      "positive": 0.9,
+      "neutral": 0.06,
+      "negative": 0.04,
+      "mention_count": 773
     },
     "디자인": {
-      "positive": 0.81,
-      "neutral": 0.10,
-      "negative": 0.09,
-      "mention_count": 286,
-      "sample_positive": ["디자인이 예뻐요", "인테리어와 잘 어울려요", "색감이 좋아요"],
-      "sample_negative": ["색상 선택이 적어요", "사진과 달라요"]
+      "positive": 0.95,
+      "neutral": 0.04,
+      "negative": 0.02,
+      "mention_count": 476
     },
-    "가격": {
-      "positive": 0.38,
-      "neutral": 0.24,
-      "negative": 0.38,
-      "mention_count": 198,
-      "sample_positive": ["할인받아서 만족", "가격 대비 품질 좋아요"],
-      "sample_negative": ["너무 비싸요", "이케아가 훨씬 저렴", "가격 대비 별로"]
+    "활용성": {
+      "positive": 0.98,
+      "neutral": 0.02,
+      "negative": 0.0,
+      "mention_count": 54
     },
     "배송/설치": {
-      "positive": 0.45,
-      "neutral": 0.18,
-      "negative": 0.37,
-      "mention_count": 256,
-      "sample_positive": ["설치 기사님 친절", "배송 빨라요"],
-      "sample_negative": ["설치 기사 불친절", "배송 지연", "설치 시 파손", "시간 약속 불이행"]
+      "positive": 0.87,
+      "neutral": 0.05,
+      "negative": 0.09,
+      "mention_count": 240
+    },
+    "가격": {
+      "positive": 0.83,
+      "neutral": 0.14,
+      "negative": 0.03,
+      "mention_count": 71
     },
     "AS/서비스": {
-      "positive": 0.42,
-      "neutral": 0.22,
-      "negative": 0.36,
-      "mention_count": 145,
-      "sample_positive": ["AS 빠르게 처리됨", "교환 잘 해줌"],
-      "sample_negative": ["AS 연락 안 됨", "교환 절차 복잡", "응대 불만"]
+      "positive": 0.5,
+      "neutral": 0.08,
+      "negative": 0.42,
+      "mention_count": 26
+    },
+    "안전": {
+      "positive": 1.0,
+      "neutral": 0.0,
+      "negative": 0.0,
+      "mention_count": 5
+    },
+    "실용성": {
+      "positive": 0.77,
+      "neutral": 0.15,
+      "negative": 0.08,
+      "mention_count": 13
+    },
+    "수납": {
+      "positive": 0.9,
+      "neutral": 0.1,
+      "negative": 0.0,
+      "mention_count": 20
+    },
+    "사이즈": {
+      "positive": 1.0,
+      "neutral": 0.0,
+      "negative": 0.0,
+      "mention_count": 6
     }
   },
-  "by_product": {
-    "책상": { "count": 312, "avg_rating": 4.3, "sentiment_score": 58, "top_issue": "설치 품질" },
-    "소파": { "count": 198, "avg_rating": 4.0, "sentiment_score": 42, "top_issue": "가격 대비 만족도" },
-    "침대": { "count": 156, "avg_rating": 4.2, "sentiment_score": 52, "top_issue": "매트리스 호환" },
-    "수납": { "count": 98, "avg_rating": 3.9, "sentiment_score": 38, "top_issue": "조립 난이도" },
-    "조명": { "count": 78, "avg_rating": 3.8, "sentiment_score": 32, "top_issue": "설치 기사 불친절" }
-  },
   "monthly_trend": [
-    { "date": "2025-09", "positive": 0.66, "negative": 0.16, "count": 148 },
-    { "date": "2025-10", "positive": 0.63, "negative": 0.18, "count": 152 },
-    { "date": "2025-11", "positive": 0.65, "negative": 0.17, "count": 138 },
-    { "date": "2025-12", "positive": 0.62, "negative": 0.20, "count": 162 },
-    { "date": "2026-01", "positive": 0.64, "negative": 0.19, "count": 145 },
-    { "date": "2026-02", "positive": 0.63, "negative": 0.18, "count": 97 }
-  ]
+    { "date": "2024-08", "count": 5, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.6 },
+    { "date": "2024-09", "count": 5, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.8 },
+    { "date": "2024-10", "count": 10, "positive": 0.9, "neutral": 0.0, "negative": 0.1, "avg_rating": 4.6 },
+    { "date": "2024-11", "count": 7, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 5.0 },
+    { "date": "2024-12", "count": 9, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 5.0 },
+    { "date": "2025-01", "count": 9, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.9 },
+    { "date": "2025-02", "count": 7, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.7 },
+    { "date": "2025-03", "count": 5, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.8 },
+    { "date": "2025-04", "count": 8, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.9 },
+    { "date": "2025-05", "count": 8, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 5.0 },
+    { "date": "2025-06", "count": 5, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 5.0 },
+    { "date": "2025-08", "count": 10, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 4.9 },
+    { "date": "2025-09", "count": 21, "positive": 1.0, "neutral": 0.0, "negative": 0.0, "avg_rating": 5.0 },
+    { "date": "2025-10", "count": 47, "positive": 0.98, "neutral": 0.0, "negative": 0.02, "avg_rating": 4.8 },
+    { "date": "2025-11", "count": 110, "positive": 0.96, "neutral": 0.02, "negative": 0.02, "avg_rating": 4.8 },
+    { "date": "2025-12", "count": 237, "positive": 0.97, "neutral": 0.03, "negative": 0.0, "avg_rating": 4.9 },
+    { "date": "2026-01", "count": 623, "positive": 0.98, "neutral": 0.02, "negative": 0.0, "avg_rating": 4.9 },
+    { "date": "2026-02", "count": 369, "positive": 0.97, "neutral": 0.03, "negative": 0.0, "avg_rating": 4.9 }
+  ],
+  "by_product": {
+    "일룸 쿠시노코지 가드수납함(쿠션용)": {
+      "count": 82,
+      "avg_rating": 4.9,
+      "sentiment_score": 82
+    },
+    "일룸 쿠시노코지 가드수납함(쿠션용) 그레이": {
+      "count": 18,
+      "avg_rating": 4.8,
+      "sentiment_score": 67
+    },
+    "일룸 팅클팝 피넛형 좌식 책상 830x550mm, IVGY(아이보리+그레이)": {
+      "count": 90,
+      "avg_rating": 4.8,
+      "sentiment_score": 84
+    },
+    "일룸 팅클팝 피넛형 좌식 책상 830x550mm, IVKB(아이보리+키즈블루)": {
+      "count": 5,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 팅클팝 피넛형 좌식 책상 830x550mm, IVKR(아이보리+키즈레드)": {
+      "count": 5,
+      "avg_rating": 5.0,
+      "sentiment_score": 80
+    },
+    "[일룸] 데일리 라이트 펌 매트리스 (SS)": {
+      "count": 100,
+      "avg_rating": 4.9,
+      "sentiment_score": 91
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 헤드형, SS(슈퍼싱글), SP(화이트)": {
+      "count": 34,
+      "avg_rating": 4.9,
+      "sentiment_score": 76
+    },
+    "일룸 반트 수납침대 프레임 헤드형, SS(슈퍼싱글), SP(화이트)": {
+      "count": 32,
+      "avg_rating": 4.6,
+      "sentiment_score": 69
+    },
+    "일룸 반트 수납침대 프레임 무헤드형, SS(슈퍼싱글), SP(화이트)": {
+      "count": 60,
+      "avg_rating": 4.9,
+      "sentiment_score": 90
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 무헤드형, SS(슈퍼싱글), SP(화이트)": {
+      "count": 20,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 반트 수납침대 프레임 무헤드형, SS(슈퍼싱글), NCC(뉴트럴밤나무)": {
+      "count": 8,
+      "avg_rating": 5.0,
+      "sentiment_score": 88
+    },
+    "일룸 반트 수납침대 프레임 무헤드형, Q(퀸), SP(화이트)": {
+      "count": 10,
+      "avg_rating": 4.8,
+      "sentiment_score": 40
+    },
+    "일룸 반트 수납침대 프레임 헤드형, SS(슈퍼싱글), NCC(뉴트럴밤나무)": {
+      "count": 4,
+      "avg_rating": 4.0,
+      "sentiment_score": 25
+    },
+    "일룸 반트 수납침대 프레임 무헤드형, Q(퀸), NCC(뉴트럴밤나무)": {
+      "count": 10,
+      "avg_rating": 4.2,
+      "sentiment_score": 80
+    },
+    "일룸 반트 수납침대 프레임 헤드형, Q(퀸), NCC(뉴트럴밤나무)": {
+      "count": 4,
+      "avg_rating": 5.0,
+      "sentiment_score": 50
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 무헤드형, SS(슈퍼싱글), NCC(뉴트럴밤나무)": {
+      "count": 4,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 헤드형, SS(슈퍼싱글), NCC(뉴트럴밤나무)": {
+      "count": 4,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 무헤드형, Q(퀸), SP(화이트)": {
+      "count": 2,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 무헤드형, Q(퀸), NCC(뉴트럴밤나무)": {
+      "count": 4,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 헤드형, Q(퀸), SP(화이트)": {
+      "count": 2,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 반트 수납침대(매트리스 미포함) 헤드형, Q(퀸), NCC(뉴트럴밤나무)": {
+      "count": 2,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "[일룸] 멘디 1400폭 3단 파티션책장": {
+      "count": 100,
+      "avg_rating": 4.8,
+      "sentiment_score": 74
+    },
+    "일룸 에디키즈 기본책장 1200x292x1054.5mm, 3단, 아이보리": {
+      "count": 99,
+      "avg_rating": 4.9,
+      "sentiment_score": 88
+    },
+    "[일룸] 에디키즈 1200폭 기본책장": {
+      "count": 1,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1200폭, 5단, 웜화이트+웜화이트(WWWW)": {
+      "count": 60,
+      "avg_rating": 4.9,
+      "sentiment_score": 85
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1200폭, 5단, 그레이+블랙(GYMBK)": {
+      "count": 5,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1400폭, 5단, 웜화이트+웜화이트(WWWW)": {
+      "count": 16,
+      "avg_rating": 4.8,
+      "sentiment_score": 75
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1200폭, 6단, 웜화이트+웜화이트(WWWW)": {
+      "count": 9,
+      "avg_rating": 4.9,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1200폭, 6단, 그레이+블랙(GYMBK)": {
+      "count": 3,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1400폭, 6단, 웜화이트+웜화이트(WWWW)": {
+      "count": 6,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600) 1400폭, 5단, 그레이+블랙(GYMBK)": {
+      "count": 1,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "[일룸]링고아이 인조가죽 의자(고정형,싯브레이크캐스터) / 초등학생의자 신학기의자 어린이공부의자": {
+      "count": 100,
+      "avg_rating": 4.9,
+      "sentiment_score": 96
+    },
+    "일룸 버니/디노 아코 버니아코(아이보리)": {
+      "count": 54,
+      "avg_rating": 4.9,
+      "sentiment_score": 91
+    },
+    "일룸 버니/디노 아코 버니아코(핑크)": {
+      "count": 23,
+      "avg_rating": 4.9,
+      "sentiment_score": 91
+    },
+    "일룸 버니/디노 아코 디노아코(아이보리)": {
+      "count": 16,
+      "avg_rating": 4.9,
+      "sentiment_score": 88
+    },
+    "일룸 버니/디노 아코 디노아코(블루)": {
+      "count": 7,
+      "avg_rating": 4.7,
+      "sentiment_score": 86
+    },
+    "[일룸] 멘디 슈퍼싱글 침대 프레임": {
+      "count": 57,
+      "avg_rating": 4.9,
+      "sentiment_score": 93
+    },
+    "[일룸] 멘디 슈퍼싱글 침대(매트리스 미포함)": {
+      "count": 43,
+      "avg_rating": 4.9,
+      "sentiment_score": 98
+    },
+    "[일룸] 멘디 2000폭 3단 파티션책장": {
+      "count": 100,
+      "avg_rating": 4.8,
+      "sentiment_score": 84
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1400폭, 6단, 웜화이트+웜화이트(WWWW)": {
+      "count": 28,
+      "avg_rating": 4.9,
+      "sentiment_score": 86
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1200폭, 6단, 웜화이트+웜화이트(WWWW)": {
+      "count": 39,
+      "avg_rating": 4.9,
+      "sentiment_score": 95
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1200폭, 5단, 웜화이트+웜화이트(WWWW)": {
+      "count": 14,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1400폭, 5단, 웜화이트+웜화이트(WWWW)": {
+      "count": 9,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1200폭, 6단, 그레이+블랙(GYMBK)": {
+      "count": 2,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1400폭, 5단, 그레이+블랙(GYMBK)": {
+      "count": 1,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1200폭, 5단, 그레이+블랙(GYMBK)": {
+      "count": 3,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 다리형 책상세트(D600, 상부도어포함) 1400폭, 6단, 그레이+블랙(GYMBK)": {
+      "count": 4,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "일룸 로이모노 책상서랍 399X410X560, 3단, 웜화이트(WW)": {
+      "count": 81,
+      "avg_rating": 4.8,
+      "sentiment_score": 79
+    },
+    "일룸 로이모노 책상서랍 399X410X560, 3단, 그레이(GYM)": {
+      "count": 18,
+      "avg_rating": 4.9,
+      "sentiment_score": 89
+    },
+    "[일룸] 로이모노 책상서랍": {
+      "count": 1,
+      "avg_rating": 5.0,
+      "sentiment_score": 100
+    },
+    "[일룸] 에디 6단 800폭 책장": {
+      "count": 100,
+      "avg_rating": 4.8,
+      "sentiment_score": 79
+    }
+  }
 }
