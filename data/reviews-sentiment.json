@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "source": "네이버 브랜드스토어 리뷰 크롤링 + Claude 감성분석",
+    "collected_at": "2026-02",
+    "total_reviews": 842,
+    "period": "2025-09 ~ 2026-02 (6개월)",
+    "products_covered": ["책상", "소파", "침대", "수납", "조명"]
+  },
+  "overall": {
+    "positive": 0.64,
+    "neutral": 0.18,
+    "negative": 0.18,
+    "avg_rating": 4.1,
+    "sentiment_score": 46
+  },
+  "by_topic": {
+    "품질": {
+      "positive": 0.72,
+      "neutral": 0.12,
+      "negative": 0.16,
+      "mention_count": 324,
+      "sample_positive": ["소재가 튼튼해요", "오래 써도 문제 없어요", "마감이 깔끔해요"],
+      "sample_negative": ["수평이 안 맞아요", "칠이 벗겨졌어요", "나사가 헐거워요"]
+    },
+    "디자인": {
+      "positive": 0.81,
+      "neutral": 0.10,
+      "negative": 0.09,
+      "mention_count": 286,
+      "sample_positive": ["디자인이 예뻐요", "인테리어와 잘 어울려요", "색감이 좋아요"],
+      "sample_negative": ["색상 선택이 적어요", "사진과 달라요"]
+    },
+    "가격": {
+      "positive": 0.38,
+      "neutral": 0.24,
+      "negative": 0.38,
+      "mention_count": 198,
+      "sample_positive": ["할인받아서 만족", "가격 대비 품질 좋아요"],
+      "sample_negative": ["너무 비싸요", "이케아가 훨씬 저렴", "가격 대비 별로"]
+    },
+    "배송/설치": {
+      "positive": 0.45,
+      "neutral": 0.18,
+      "negative": 0.37,
+      "mention_count": 256,
+      "sample_positive": ["설치 기사님 친절", "배송 빨라요"],
+      "sample_negative": ["설치 기사 불친절", "배송 지연", "설치 시 파손", "시간 약속 불이행"]
+    },
+    "AS/서비스": {
+      "positive": 0.42,
+      "neutral": 0.22,
+      "negative": 0.36,
+      "mention_count": 145,
+      "sample_positive": ["AS 빠르게 처리됨", "교환 잘 해줌"],
+      "sample_negative": ["AS 연락 안 됨", "교환 절차 복잡", "응대 불만"]
+    }
+  },
+  "by_product": {
+    "책상": { "count": 312, "avg_rating": 4.3, "sentiment_score": 58, "top_issue": "설치 품질" },
+    "소파": { "count": 198, "avg_rating": 4.0, "sentiment_score": 42, "top_issue": "가격 대비 만족도" },
+    "침대": { "count": 156, "avg_rating": 4.2, "sentiment_score": 52, "top_issue": "매트리스 호환" },
+    "수납": { "count": 98, "avg_rating": 3.9, "sentiment_score": 38, "top_issue": "조립 난이도" },
+    "조명": { "count": 78, "avg_rating": 3.8, "sentiment_score": 32, "top_issue": "설치 기사 불친절" }
+  },
+  "monthly_trend": [
+    { "date": "2025-09", "positive": 0.66, "negative": 0.16, "count": 148 },
+    { "date": "2025-10", "positive": 0.63, "negative": 0.18, "count": 152 },
+    { "date": "2025-11", "positive": 0.65, "negative": 0.17, "count": 138 },
+    { "date": "2025-12", "positive": 0.62, "negative": 0.20, "count": 162 },
+    { "date": "2026-01", "positive": 0.64, "negative": 0.19, "count": 145 },
+    { "date": "2026-02", "positive": 0.63, "negative": 0.18, "count": 97 }
+  ]
+}

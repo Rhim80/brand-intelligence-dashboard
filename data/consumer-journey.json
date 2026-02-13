@@ -1,0 +1,228 @@
+{
+  "meta": {
+    "source": "Gemini API 키워드 의도 분류",
+    "collected_at": "2026-02-13",
+    "total_keywords_analyzed": 500,
+    "total_keywords_pool": 5183,
+    "classification_method": "3-stage intent classification (Gemini 2.0 Flash)",
+    "note": "GA 없이 실제 이탈률 측정 불가. 검색 키워드 기반 '추정 이탈 경향'으로 해석 필요."
+  },
+  "stages": {
+    "awareness": {
+      "label": "인지 (Awareness)",
+      "description": "카테고리/니즈 기반 검색",
+      "keyword_count": 416,
+      "total_volume": 3861540,
+      "share": 0.83,
+      "sample_keywords": [
+        {
+          "keyword": "침대",
+          "volume": 131700,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "매트리스",
+          "volume": 119700,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "행거",
+          "volume": 105400,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "쇼파",
+          "volume": 90200,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "침대프레임",
+          "volume": 88800,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "의자",
+          "volume": 72900,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "책장",
+          "volume": 68400,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "시스템행거",
+          "volume": 63400,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "컴퓨터책상",
+          "volume": 63100,
+          "stage": "awareness"
+        },
+        {
+          "keyword": "옷장",
+          "volume": 62500,
+          "stage": "awareness"
+        }
+      ]
+    },
+    "consideration": {
+      "label": "비교 (Consideration)",
+      "description": "브랜드 비교/리뷰 검색",
+      "keyword_count": 76,
+      "total_volume": 2342640,
+      "share": 0.15,
+      "sample_keywords": [
+        {
+          "keyword": "이케아",
+          "volume": 889500,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "한샘",
+          "volume": 216800,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "일룸",
+          "volume": 198200,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "한샘몰",
+          "volume": 181500,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "리바트",
+          "volume": 107000,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "까사미아",
+          "volume": 105800,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "데스커책상",
+          "volume": 66720,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "자코모",
+          "volume": 57400,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "일룸책상",
+          "volume": 38760,
+          "stage": "consideration"
+        },
+        {
+          "keyword": "까사미아쇼파",
+          "volume": 26590,
+          "stage": "consideration"
+        }
+      ],
+      "exit_signals": {
+        "note": "비교 키워드에서 경쟁사 언급 빈도 = 추정 이탈 방향",
+        "competitors": {
+          "이케아": {
+            "mention_count": 18,
+            "share": 0.24,
+            "sample": [
+              "이케아",
+              "이케아서랍장",
+              "이케아의자"
+            ]
+          },
+          "한샘": {
+            "mention_count": 11,
+            "share": 0.14,
+            "sample": [
+              "한샘",
+              "한샘몰",
+              "한샘가구"
+            ]
+          },
+          "까사미아": {
+            "mention_count": 11,
+            "share": 0.14,
+            "sample": [
+              "까사미아",
+              "까사미아쇼파",
+              "까사미아캄포소파"
+            ]
+          },
+          "자코모": {
+            "mention_count": 1,
+            "share": 0.01,
+            "sample": [
+              "자코모"
+            ]
+          },
+          "기타": {
+            "mention_count": 35,
+            "share": 0.46
+          }
+        }
+      }
+    },
+    "conversion": {
+      "label": "구매 (Conversion)",
+      "description": "가격/구매처/매장 검색",
+      "keyword_count": 8,
+      "total_volume": 48680,
+      "share": 0.02,
+      "sample_keywords": [
+        {
+          "keyword": "리퍼브매장",
+          "volume": 19960,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "창고형할인매장",
+          "volume": 6580,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "가구단지",
+          "volume": 5270,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "반품샵",
+          "volume": 4650,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "까사미아아울렛",
+          "volume": 4540,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "한샘고객센터",
+          "volume": 2950,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "반품매장",
+          "volume": 2450,
+          "stage": "conversion"
+        },
+        {
+          "keyword": "이케아조립서비스",
+          "volume": 2280,
+          "stage": "conversion"
+        }
+      ]
+    }
+  },
+  "funnel_summary": {
+    "awareness_to_consideration": 0.61,
+    "consideration_to_conversion": 0.02,
+    "estimated_leak_rate": 0.99,
+    "primary_leak_destination": "기타"
+  }
+}

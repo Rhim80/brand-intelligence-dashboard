@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "source": "Gemini API 키워드 클러스터링",
+    "collected_at": "2026-02-13",
+    "total_keywords_pool": 5183,
+    "clustering_method": "LLM-based persona clustering (Gemini 2.0 Flash)"
+  },
+  "clusters": [
+    {
+      "id": "kids-parent",
+      "persona": "키즈맘/키즈대디",
+      "description": "자녀방 가구에 관심이 많고, 아이의 성장과 학습 환경에 맞는 가구를 찾고 있습니다. 안전하고 기능적인 디자인을 선호하며, 일룸과 니스툴그로우 등 아이 가구 전문 브랜드를 고려합니다.",
+      "color": "#8b5cf6",
+      "keyword_count": 27,
+      "total_volume": 499080,
+      "share": 0.13,
+      "top_keywords": [
+        {
+          "keyword": "일룸",
+          "volume": 198200
+        },
+        {
+          "keyword": "벙커침대",
+          "volume": 40600
+        },
+        {
+          "keyword": "일룸책상",
+          "volume": 38760
+        },
+        {
+          "keyword": "초등학생책상",
+          "volume": 22920
+        },
+        {
+          "keyword": "범퍼침대",
+          "volume": 20340
+        },
+        {
+          "keyword": "2층침대",
+          "volume": 19280
+        },
+        {
+          "keyword": "신생아침대",
+          "volume": 14220
+        }
+      ],
+      "needs": [
+        "안전한 소재와 디자인",
+        "아이의 성장 단계에 맞는 기능",
+        "수납 공간 확보",
+        "학습 능률을 높이는 환경",
+        "아이방 인테리어 호환성"
+      ],
+      "pain_points": [
+        "높은 가격",
+        "잦은 가구 교체에 대한 부담",
+        "아이의 취향 변화"
+      ]
+    },
+    {
+      "id": "newlyweds",
+      "persona": "신혼부부",
+      "description": "새로운 시작을 위해 감각적인 디자인과 실용성을 겸비한 가구를 찾고 있습니다. 예산 범위 내에서 트렌디하고 오래 사용할 수 있는 가구를 선호하며, 온라인 쇼핑몰과 브랜드 매장을 통해 정보를 얻습니다.",
+      "color": "#ec4899",
+      "keyword_count": 13,
+      "total_volume": 1689610,
+      "share": 0.44,
+      "top_keywords": [
+        {
+          "keyword": "이케아",
+          "volume": 889500
+        },
+        {
+          "keyword": "한샘몰",
+          "volume": 181500
+        },
+        {
+          "keyword": "침대",
+          "volume": 131700
+        },
+        {
+          "keyword": "매트리스",
+          "volume": 119700
+        },
+        {
+          "keyword": "리바트",
+          "volume": 107000
+        },
+        {
+          "keyword": "까사미아",
+          "volume": 105800
+        },
+        {
+          "keyword": "쇼파",
+          "volume": 90200
+        }
+      ],
+      "needs": [
+        "합리적인 가격",
+        "세련된 디자인",
+        "다양한 스타일 연출",
+        "공간 활용 극대화",
+        "내구성"
+      ],
+      "pain_points": [
+        "좁은 공간에 맞는 가구 선택",
+        "예산 초과",
+        "가구 배치 어려움"
+      ]
+    },
+    {
+      "id": "single-person",
+      "persona": "1인 가구",
+      "description": "혼자 사는 공간에 필요한 실용적이고 컴팩트한 가구를 찾고 있습니다. 공간 활용도가 높고 이동이 편리한 가구를 선호하며, DIY 가구나 조립식 가구에 관심이 많습니다.",
+      "color": "#06b6d4",
+      "keyword_count": 29,
+      "total_volume": 535930,
+      "share": 0.14,
+      "top_keywords": [
+        {
+          "keyword": "행거",
+          "volume": 105400
+        },
+        {
+          "keyword": "의자",
+          "volume": 72900
+        },
+        {
+          "keyword": "선반",
+          "volume": 51400
+        },
+        {
+          "keyword": "틈새수납장",
+          "volume": 42530
+        },
+        {
+          "keyword": "1인용쇼파",
+          "volume": 36570
+        },
+        {
+          "keyword": "철제선반",
+          "volume": 29930
+        },
+        {
+          "keyword": "벽선반",
+          "volume": 20800
+        }
+      ],
+      "needs": [
+        "최소한의 공간 활용",
+        "저렴한 가격",
+        "간편한 설치 및 이동",
+        "다용도성",
+        "심플한 디자인"
+      ],
+      "pain_points": [
+        "내구성 부족",
+        "수납 공간 부족",
+        "디자인 선택의 폭이 좁음"
+      ]
+    },
+    {
+      "id": "working-professional",
+      "persona": "직장인",
+      "description": "업무 효율성을 높여주는 기능성 가구와 편안한 휴식을 위한 가구를 찾고 있습니다. 인체공학적 디자인과 모던한 스타일을 선호하며, 온라인 쇼핑몰과 SNS를 통해 정보를 얻습니다.",
+      "color": "#f59e0b",
+      "keyword_count": 26,
+      "total_volume": 425100,
+      "share": 0.11,
+      "top_keywords": [
+        {
+          "keyword": "데스커책상",
+          "volume": 66720
+        },
+        {
+          "keyword": "컴퓨터책상",
+          "volume": 63100
+        },
+        {
+          "keyword": "모션데스크",
+          "volume": 48100
+        },
+        {
+          "keyword": "독서실책상",
+          "volume": 33790
+        },
+        {
+          "keyword": "리클라이너",
+          "volume": 28460
+        },
+        {
+          "keyword": "데스크테리어",
+          "volume": 19620
+        },
+        {
+          "keyword": "데스커모션데스크",
+          "volume": 18360
+        }
+      ],
+      "needs": [
+        "업무 효율성 향상",
+        "편안한 자세 유지",
+        "세련된 디자인",
+        "개인 공간 확보",
+        "스트레스 해소"
+      ],
+      "pain_points": [
+        "높은 가격",
+        "공간 제약",
+        "획일적인 디자인"
+      ]
+    },
+    {
+      "id": "moving-renovating",
+      "persona": "이사/리모델링 고객",
+      "description": "새로운 집으로 이사하거나 집을 리모델링하면서 전체적인 가구 교체를 고려하고 있습니다. 최신 트렌드를 반영하고 집 분위기에 어울리는 가구를 찾으며, 가구단지나 박람회를 방문하여 직접 체험하는 것을 선호합니다.",
+      "color": "#22c55e",
+      "keyword_count": 11,
+      "total_volume": 672650,
+      "share": 0.18,
+      "top_keywords": [
+        {
+          "keyword": "한샘",
+          "volume": 216800
+        },
+        {
+          "keyword": "한샘몰",
+          "volume": 181500
+        },
+        {
+          "keyword": "리바트",
+          "volume": 107000
+        },
+        {
+          "keyword": "까사미아",
+          "volume": 105800
+        },
+        {
+          "keyword": "씽크대",
+          "volume": 21780
+        },
+        {
+          "keyword": "가구박람회",
+          "volume": 13140
+        },
+        {
+          "keyword": "한샘싱크대",
+          "volume": 8050
+        }
+      ],
+      "needs": [
+        "전체적인 인테리어 조화",
+        "최신 트렌드 반영",
+        "다양한 스타일 선택",
+        "합리적인 가격",
+        "시공 및 설치 서비스"
+      ],
+      "pain_points": [
+        "높은 비용",
+        "긴 시공 기간",
+        "가구 선택의 어려움"
+      ]
+    }
+  ]
+}

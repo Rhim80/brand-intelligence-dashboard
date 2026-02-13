@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "source": "Tab 1-5 데이터 종합 + Claude 전략 제안",
+    "collected_at": "2026-02",
+    "methodology": "Y축(영향도) = 검색량 x SOS 갭, X축(실행성) = 수동 평가"
+  },
+  "matrix_items": [
+    {
+      "id": 1,
+      "label": "키즈 가구 리더십 강화",
+      "category": "강점 활용",
+      "priority": "critical",
+      "impact": 92,
+      "feasibility": 85,
+      "description": "일룸의 유일한 AI SOV 1위 카테고리. 키즈맘 타깃 콘텐츠 + 성장형 패키지 마케팅으로 리더십 공고화",
+      "data_basis": "AI SOV 키즈가구 78% 1위, 클러스터 '키즈맘' 검색량 28.5만",
+      "actions": [
+        "성장형 책상 패키지 프로모션 (책상+의자+조명)",
+        "육아 커뮤니티 타깃 콘텐츠 마케팅",
+        "키즈 전용 매장 존 확대"
+      ],
+      "expected_impact": "SOS +3-5%p, 키즈 카테고리 매출 +15%"
+    },
+    {
+      "id": 2,
+      "label": "배송/설치 서비스 개선",
+      "category": "약점 보완",
+      "priority": "critical",
+      "impact": 88,
+      "feasibility": 70,
+      "description": "리뷰 부정 감성 1위 요인. 설치 기사 교육 + 서비스 모니터링 체계 구축",
+      "data_basis": "배송/설치 부정 37%, 조명 카테고리 '설치 기사 불친절' 이슈",
+      "actions": [
+        "설치 기사 CS 교육 프로그램 도입",
+        "설치 후 만족도 조사 시스템",
+        "불만 접수 → 48시간 내 해결 프로세스"
+      ],
+      "expected_impact": "리뷰 부정률 37% → 25%, 평균 별점 +0.2"
+    },
+    {
+      "id": 3,
+      "label": "AI 플랫폼 브랜드 존재감 확보",
+      "category": "신규 기회",
+      "priority": "high",
+      "impact": 78,
+      "feasibility": 65,
+      "description": "AI SOV 18.3%로 한샘(28.4%), 이케아(27.5%) 대비 열위. AI 검색 최적화로 언급률 향상",
+      "data_basis": "AI 언급률 56% (3위), 1순위 추천 16% (3위)",
+      "actions": [
+        "브랜드 콘텐츠 AI 크롤링 최적화 (구조화된 데이터)",
+        "위키피디아/나무위키 브랜드 정보 업데이트",
+        "제품 비교 콘텐츠 강화 (vs 경쟁사)"
+      ],
+      "expected_impact": "AI 언급률 56% → 70%, SOV 18% → 24%"
+    },
+    {
+      "id": 4,
+      "label": "한샘 이탈 방어 전략",
+      "category": "위협 대응",
+      "priority": "high",
+      "impact": 82,
+      "feasibility": 60,
+      "description": "비교 키워드에서 한샘 언급 31%로 최다 이탈 방향. 비교 검색 시 일룸 우위 포인트 강조",
+      "data_basis": "소비자여정 이탈: 한샘 31%, 이케아 23%, 자코모 15%",
+      "actions": [
+        "'일룸 vs 한샘' 비교 콘텐츠 제작 (SEO)",
+        "한샘 약점(AS, 품질) 대비 일룸 강점 어필",
+        "비교 검색 키워드 타깃 검색광고"
+      ],
+      "expected_impact": "비교 단계 → 구매 전환율 +8-12%"
+    },
+    {
+      "id": 5,
+      "label": "가격 인식 개선",
+      "category": "약점 보완",
+      "priority": "high",
+      "impact": 75,
+      "feasibility": 55,
+      "description": "가격 관련 부정 감성 38%. '가성비 추구형' 클러스터 대응 필요",
+      "data_basis": "리뷰 '가격' 부정 38%, 클러스터 '가성비 추구형' 16.8만 검색량",
+      "actions": [
+        "가격 대비 가치(TCO) 메시지 강화",
+        "엔트리 라인업 확대 (합리적 가격대)",
+        "할인/쿠폰 프로모션 빈도 증가"
+      ],
+      "expected_impact": "가격 부정 감성 38% → 28%, SOS +1-2%p"
+    },
+    {
+      "id": 6,
+      "label": "재택근무 시장 공략",
+      "category": "신규 기회",
+      "priority": "medium",
+      "impact": 65,
+      "feasibility": 75,
+      "description": "재택근무자 클러스터 15.6만 검색량. 시디즈/데스커 대비 인지도 낮으나 모션데스크로 차별화 가능",
+      "data_basis": "클러스터 '재택근무자' 17%, 모션데스크 검색량 증가 추세",
+      "actions": [
+        "모션데스크 + 의자 패키지 프로모션",
+        "B2B 기업 납품 채널 개발",
+        "재택근무 인테리어 콘텐츠 마케팅"
+      ],
+      "expected_impact": "재택 카테고리 SOS 5% → 12%"
+    },
+    {
+      "id": 7,
+      "label": "SNS/인플루언서 마케팅 강화",
+      "category": "신규 기회",
+      "priority": "medium",
+      "impact": 60,
+      "feasibility": 80,
+      "description": "인테리어 관심층 14.2만 검색량. 이케아 대비 디자인 다양성에서 열위이나, 품질로 차별화 가능",
+      "data_basis": "클러스터 '인테리어 관심층' 15%, 디자인 긍정 81%",
+      "actions": [
+        "인테리어 인플루언서 협업 (룸투어 콘텐츠)",
+        "인스타그램 쇼룸 콘텐츠 강화",
+        "사용자 인테리어 사진 캠페인"
+      ],
+      "expected_impact": "브랜드 인지도 개선, 2030 유입 +20%"
+    }
+  ]
+}

@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brand Intelligence Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #1a1a24;
+      --bg-card-hover: #22222e;
+      --text-primary: #e8e8ed;
+      --text-secondary: #8888a0;
+      --text-muted: #555570;
+      --accent: #00d4ff;
+      --accent-purple: #9333ea;
+      --border: #2a2a3a;
+      --critical: #ef4444;
+      --high: #f97316;
+      --medium: #22c55e;
+      --positive: #22c55e;
+      --negative: #ef4444;
+      --neutral: #6b7280;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; color: #fff;
+    }
+    .logo-text { font-size: 18px; font-weight: 600; }
+    .logo-text span { color: var(--text-secondary); font-weight: 400; font-size: 14px; margin-left: 8px; }
+    .header-meta {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 12px; color: var(--text-secondary);
+    }
+    .header-meta .badge {
+      background: rgba(0,212,255,0.1); color: var(--accent);
+      padding: 4px 10px; border-radius: 12px; font-size: 11px;
+    }
+
+    /* Tabs */
+    .tab-nav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      overflow-x: auto;
+    }
+    .tab-nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0;
+    }
+    .tab-btn {
+      padding: 14px 20px;
+      background: none; border: none;
+      color: var(--text-secondary);
+      font-size: 14px; font-weight: 500;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Content */
+    .content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Grid */
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
+    .grid-1 { margin-bottom: 24px; }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-2px); }
+    .card-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    /* KPI Cards */
+    .kpi-value {
+      font-size: 32px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .kpi-change {
+      font-size: 13px;
+      margin-top: 4px;
+    }
+    .kpi-change.up { color: var(--positive); }
+    .kpi-change.down { color: var(--negative); }
+    .kpi-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Chart container */
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 300px;
+    }
+    .chart-container.tall { height: 400px; }
+
+    /* Section title */
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Journey flow */
+    .journey-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+    .journey-node {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      min-width: 180px;
+      flex: 1;
+      max-width: 280px;
+    }
+    .journey-node.highlight {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(0,212,255,0.15);
+    }
+    .journey-node .label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .journey-node .value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .journey-node .keywords {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .journey-arrow {
+      font-size: 24px;
+      color: var(--text-muted);
+      padding: 0 8px;
+      flex-shrink: 0;
+    }
+    .journey-rate {
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* Exit analysis bar */
+    .exit-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .exit-bar:last-child { border-bottom: none; }
+    .exit-bar .name { width: 80px; font-size: 13px; }
+    .exit-bar .bar-track {
+      flex: 1; height: 24px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .exit-bar .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding-left: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      transition: width 0.6s ease;
+    }
+    .exit-bar .pct { width: 50px; text-align: right; font-size: 13px; color: var(--text-secondary); }
+
+    /* Cluster cards */
+    .cluster-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      border-left: 4px solid;
+    }
+    .cluster-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .cluster-persona {
+      font-size: 16px; font-weight: 600;
+    }
+    .cluster-share {
+      font-size: 24px; font-weight: 700; color: var(--accent);
+    }
+    .cluster-desc {
+      font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;
+    }
+    .cluster-tags {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;
+    }
+    .cluster-tag {
+      background: var(--bg-secondary);
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 11px; color: var(--text-secondary);
+    }
+    .cluster-detail {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .cluster-detail.open { display: block; }
+    .cluster-detail h4 {
+      font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .cluster-detail ul {
+      list-style: none; padding: 0;
+    }
+    .cluster-detail li {
+      font-size: 13px; padding: 4px 0; color: var(--text-primary);
+    }
+    .toggle-btn {
+      background: none; border: 1px solid var(--border);
+      color: var(--text-secondary); padding: 6px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 12px;
+      margin-top: 8px;
+    }
+    .toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Sentiment bars */
+    .sentiment-bar-group { margin-bottom: 16px; }
+    .sentiment-label {
+      display: flex; justify-content: space-between; margin-bottom: 4px;
+    }
+    .sentiment-label .topic { font-size: 14px; }
+    .sentiment-label .count { font-size: 12px; color: var(--text-secondary); }
+    .sentiment-track {
+      display: flex; height: 20px; border-radius: 4px; overflow: hidden;
+    }
+    .sentiment-fill-pos { background: var(--positive); }
+    .sentiment-fill-neu { background: var(--neutral); }
+    .sentiment-fill-neg { background: var(--negative); }
+
+    /* Strategy cards */
+    .strategy-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      border-top: 3px solid;
+    }
+    .strategy-card[data-priority="critical"] { border-top-color: var(--critical); }
+    .strategy-card[data-priority="high"] { border-top-color: var(--high); }
+    .strategy-card[data-priority="medium"] { border-top-color: var(--medium); }
+    .strategy-header {
+      display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;
+    }
+    .strategy-title { font-size: 15px; font-weight: 600; }
+    .priority-badge {
+      padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; text-transform: uppercase;
+    }
+    .priority-badge.critical { background: rgba(239,68,68,0.15); color: var(--critical); }
+    .priority-badge.high { background: rgba(249,115,22,0.15); color: var(--high); }
+    .priority-badge.medium { background: rgba(34,197,94,0.15); color: var(--medium); }
+    .strategy-category {
+      font-size: 12px; color: var(--text-muted); margin-bottom: 8px;
+    }
+    .strategy-desc {
+      font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;
+    }
+    .strategy-metrics {
+      display: flex; gap: 12px; margin-bottom: 12px;
+    }
+    .strategy-metric {
+      background: var(--bg-secondary); padding: 6px 12px; border-radius: 8px;
+      font-size: 12px;
+    }
+    .strategy-metric .metric-label { color: var(--text-muted); }
+    .strategy-metric .metric-value { color: var(--accent); font-weight: 600; }
+    .strategy-detail {
+      display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .strategy-detail.open { display: block; }
+    .strategy-detail .action-item {
+      font-size: 13px; padding: 6px 0; padding-left: 16px; position: relative;
+      color: var(--text-secondary);
+    }
+    .strategy-detail .action-item::before {
+      content: ''; position: absolute; left: 0; top: 12px;
+      width: 8px; height: 8px; border: 2px solid var(--accent);
+      border-radius: 50%;
+    }
+    .strategy-expected {
+      margin-top: 12px; padding: 10px; background: var(--bg-secondary);
+      border-radius: 8px; font-size: 12px; color: var(--text-secondary);
+    }
+    .strategy-expected strong { color: var(--accent); }
+
+    /* Filter buttons */
+    .filter-bar {
+      display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 6px 16px; border-radius: 8px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 13px; cursor: pointer;
+    }
+    .filter-btn.active {
+      background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600;
+    }
+
+    /* Insight cards */
+    .insight-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      border-left: 3px solid;
+    }
+    .insight-card.strength { border-left-color: var(--positive); }
+    .insight-card.weakness { border-left-color: var(--negative); }
+    .insight-card.opportunity { border-left-color: var(--accent); }
+    .insight-type {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
+      margin-bottom: 6px; font-weight: 600;
+    }
+    .insight-card.strength .insight-type { color: var(--positive); }
+    .insight-card.weakness .insight-type { color: var(--negative); }
+    .insight-card.opportunity .insight-type { color: var(--accent); }
+    .insight-text { font-size: 13px; color: var(--text-secondary); }
+
+    /* Data table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      font-size: 14px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table tr:hover td {
+      background: var(--bg-card-hover);
+    }
+    .data-table .rank { font-weight: 700; color: var(--accent); }
+    .data-table .brand-dot {
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; margin-right: 8px;
+    }
+
+    /* Loading */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-secondary);
+    }
+    .loading::after {
+      content: '...';
+      animation: dots 1.5s infinite;
+    }
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .header-inner { flex-direction: column; gap: 8px; }
+      .journey-flow { flex-direction: column; }
+      .journey-arrow { transform: rotate(90deg); }
+      .kpi-value { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">BI</div>
+      <div class="logo-text" id="header-title">Brand Intelligence Dashboard <span id="header-brand"></span></div>
+    </div>
+    <div class="header-meta">
+      <span id="header-date"></span>
+      <span class="badge" id="header-badge">Config-driven</span>
+    </div>
+  </div>
+</header>
+
+<!-- Tab Navigation -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner" id="tab-nav"></div>
+</nav>
+
+<!-- Content -->
+<div class="content" id="content">
+  <div class="loading" id="loading">Loading data</div>
+</div>
+
+<script>
+// ============================================================
+// Global State
+// ============================================================
+let CONFIG = null;
+let DATA = {};
+const BRAND_COLORS = {};
+
+// ============================================================
+// Data Loading
+// ============================================================
+async function loadConfig() {
+  const res = await fetch('config.json');
+  CONFIG = await res.json();
+  BRAND_COLORS[CONFIG.brand.name] = CONFIG.brand.color;
+  CONFIG.competitors.forEach(c => { BRAND_COLORS[c.name] = c.color; });
+}
+
+async function loadData() {
+  const files = [
+    'search-volume', 'trend', 'keyword-clusters',
+    'consumer-journey', 'ai-sov', 'reviews-sentiment', 'strategy-matrix'
+  ];
+  const results = await Promise.all(
+    files.map(f => fetch(`data/${f}.json`).then(r => r.json()).catch(() => null))
+  );
+  files.forEach((f, i) => { DATA[f] = results[i]; });
+}
+
+function getAllBrands() {
+  return [CONFIG.brand.name, ...CONFIG.competitors.map(c => c.name)];
+}
+
+function getBrandColor(name) {
+  return BRAND_COLORS[name] || '#888';
+}
+
+function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+  return n.toString();
+}
+
+// ============================================================
+// Tab System
+// ============================================================
+function initTabs() {
+  const nav = document.getElementById('tab-nav');
+  CONFIG.dashboard.tabs.forEach((tab, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = tab;
+    btn.dataset.tab = i;
+    btn.onclick = () => switchTab(i);
+    nav.appendChild(btn);
+  });
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.tab-btn[data-tab="${idx}"]`).classList.add('active');
+  const tc = document.getElementById(`tab-${idx}`);
+  if (tc) tc.classList.add('active');
+}
+
+// ============================================================
+// Render All Tabs
+// ============================================================
+function renderDashboard() {
+  document.getElementById('header-brand').textContent = `| ${CONFIG.brand.name}`;
+  document.getElementById('header-date').textContent = DATA['search-volume']?.current?.date || '';
+  document.getElementById('loading').style.display = 'none';
+
+  const content = document.getElementById('content');
+  const tabs = [renderOverview, renderMarket, renderJourney, renderClusters, renderAI, renderStrategy];
+  tabs.forEach((fn, i) => {
+    const div = document.createElement('div');
+    div.className = 'tab-content' + (i === 0 ? ' active' : '');
+    div.id = `tab-${i}`;
+    div.innerHTML = fn();
+    content.appendChild(div);
+  });
+
+  // Initialize charts after DOM is ready
+  requestAnimationFrame(() => {
+    initOverviewCharts();
+    initMarketCharts();
+    initJourneyCharts();
+    initClusterCharts();
+    initAICharts();
+    initStrategyCharts();
+  });
+}
+
+// ============================================================
+// Tab 0: Overview
+// ============================================================
+function renderOverview() {
+  const sv = DATA['search-volume'];
+  const brands = getAllBrands();
+  const current = sv.current.brands;
+  const brandTotal = current[CONFIG.brand.name]?.total || 0;
+  const allTotal = brands.reduce((s, b) => s + (current[b]?.total || 0), 0);
+  const sos = ((brandTotal / allTotal) * 100).toFixed(1);
+  const rank = brands.slice().sort((a, b) => (current[b]?.total || 0) - (current[a]?.total || 0))
+    .indexOf(CONFIG.brand.name) + 1;
+
+  // YoY change
+  const hist = sv.historical || [];
+  const lastYear = hist.find(h => {
+    const d = sv.current.date.split('-');
+    return h.date === `${parseInt(d[0])-1}-${d[1]}`;
+  });
+  const yoy = lastYear
+    ? (((brandTotal - lastYear.brands[CONFIG.brand.name]?.total) / lastYear.brands[CONFIG.brand.name]?.total) * 100).toFixed(1)
+    : null;
+
+  const rev = DATA['reviews-sentiment'];
+  const sentScore = rev?.overall?.sentiment_score || '-';
+
+  return `
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">Share of Search (SOS)</div>
+        <div class="kpi-value">${sos}%</div>
+        <div class="kpi-sub">${CONFIG.brand.name} / 전체 ${brands.length}개 브랜드</div>
+      </div>
+      <div class="card">
+        <div class="card-title">월간 검색량</div>
+        <div class="kpi-value">${formatNum(brandTotal)}</div>
+        <div class="kpi-change ${yoy > 0 ? 'up' : 'down'}">${yoy !== null ? (yoy > 0 ? '+' : '') + yoy + '% YoY' : '전년 데이터 없음'}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">시장 순위</div>
+        <div class="kpi-value">#${rank}</div>
+        <div class="kpi-sub">${brands.length}개 브랜드 중</div>
+      </div>
+      <div class="card">
+        <div class="card-title">감성 점수</div>
+        <div class="kpi-value">${sentScore}</div>
+        <div class="kpi-sub">긍정 ${(rev?.overall?.positive * 100 || 0).toFixed(0)}% / 부정 ${(rev?.overall?.negative * 100 || 0).toFixed(0)}%</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">검색량 점유율 (Share of Search)</div>
+        <div class="chart-container"><canvas id="chart-sos"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">경쟁사 비교 (월간 검색량)</div>
+        <div class="chart-container"><canvas id="chart-compare"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">검색자 성별</div>
+        <div class="chart-container"><canvas id="chart-gender"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">검색자 연령</div>
+        <div class="chart-container"><canvas id="chart-age"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-title">브랜드별 검색량 상세</div>
+    <div class="card">
+      <table class="data-table">
+        <thead><tr>
+          <th>순위</th><th>브랜드</th><th>PC</th><th>Mobile</th><th>합계</th><th>SOS</th>
+        </tr></thead>
+        <tbody>
+          ${brands.slice().sort((a, b) => (current[b]?.total || 0) - (current[a]?.total || 0))
+            .map((b, i) => {
+              const d = current[b] || {};
+              const bsos = ((d.total / allTotal) * 100).toFixed(1);
+              return `<tr>
+                <td class="rank">${i + 1}</td>
+                <td><span class="brand-dot" style="background:${getBrandColor(b)}"></span>${b}</td>
+                <td>${d.pc ? formatNum(d.pc) : '-'}</td>
+                <td>${d.mobile ? formatNum(d.mobile) : '-'}</td>
+                <td><strong>${formatNum(d.total || 0)}</strong></td>
+                <td>${bsos}%</td>
+              </tr>`;
+            }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function initOverviewCharts() {
+  const sv = DATA['search-volume'];
+  const brands = getAllBrands();
+  const current = sv.current.brands;
+
+  // SOS Doughnut
+  new Chart(document.getElementById('chart-sos'), {
+    type: 'doughnut',
+    data: {
+      labels: brands,
+      datasets: [{
+        data: brands.map(b => current[b]?.total || 0),
+        backgroundColor: brands.map(b => getBrandColor(b)),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#8888a0', padding: 12, font: { size: 12 } } },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+              return `${ctx.label}: ${formatNum(ctx.raw)} (${(ctx.raw/total*100).toFixed(1)}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Competitor Bar
+  const sorted = brands.slice().sort((a, b) => (current[b]?.total || 0) - (current[a]?.total || 0));
+  new Chart(document.getElementById('chart-compare'), {
+    type: 'bar',
+    data: {
+      labels: sorted,
+      datasets: [{
+        data: sorted.map(b => current[b]?.total || 0),
+        backgroundColor: sorted.map(b => getBrandColor(b)),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => formatNum(ctx.raw) } }
+      },
+      scales: {
+        x: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
+        y: { ticks: { color: '#e8e8ed' }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Gender
+  const demo = sv.demographics;
+  new Chart(document.getElementById('chart-gender'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Female', 'Male'],
+      datasets: [{
+        data: [demo.gender.female * 100, demo.gender.male * 100],
+        backgroundColor: ['#ec4899', '#3b82f6'],
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#8888a0', font: { size: 12 } } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw.toFixed(0) + '%' } }
+      }
+    }
+  });
+
+  // Age
+  const ageLabels = Object.keys(demo.age);
+  new Chart(document.getElementById('chart-age'), {
+    type: 'bar',
+    data: {
+      labels: ageLabels,
+      datasets: [{
+        data: ageLabels.map(k => demo.age[k] * 100),
+        backgroundColor: '#9333ea',
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
+        x: { ticks: { color: '#8888a0' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Tab 1: Market Analysis
+// ============================================================
+function renderMarket() {
+  const trend = DATA['trend'];
+  return `
+    <div class="grid-1">
+      <div class="card">
+        <div class="card-title">24개월 검색 트렌드 (상대값)</div>
+        <div class="chart-container tall"><canvas id="chart-trend"></canvas></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">월별 검색량 변화 (12개월)</div>
+        <div class="chart-container"><canvas id="chart-monthly"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">계절성 패턴 (${CONFIG.brand.name})</div>
+        <div class="chart-container"><canvas id="chart-season"></canvas></div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="insight-card strength">
+        <div class="insight-type">Strength</div>
+        <div class="insight-text">신학기(1월)와 연말(12월) 시즌에 검색량 급증. 시즌 마케팅 타이밍 확보.</div>
+      </div>
+      <div class="insight-card weakness">
+        <div class="insight-type">Weakness</div>
+        <div class="insight-text">6월 비수기 검색량 급감(연평균 대비 -12%). 비수기 프로모션 필요.</div>
+      </div>
+      <div class="insight-card opportunity">
+        <div class="insight-type">Opportunity</div>
+        <div class="insight-text">이사철(7-8월) 검색량 반등 구간에서 경쟁사 대비 회복 속도 빠름.</div>
+      </div>
+    </div>
+  `;
+}
+
+function initMarketCharts() {
+  const trend = DATA['trend'];
+  const brands = getAllBrands();
+  const monthly = trend.monthly;
+
+  // 24-month trend line
+  new Chart(document.getElementById('chart-trend'), {
+    type: 'line',
+    data: {
+      labels: monthly.map(m => m.date),
+      datasets: brands.map(b => ({
+        label: b,
+        data: monthly.map(m => m[b] || 0),
+        borderColor: getBrandColor(b),
+        backgroundColor: 'transparent',
+        borderWidth: b === CONFIG.brand.name ? 3 : 1.5,
+        pointRadius: b === CONFIG.brand.name ? 3 : 0,
+        tension: 0.3
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { color: '#8888a0', usePointStyle: true, padding: 16 } }
+      },
+      scales: {
+        y: { ticks: { color: '#555570' }, grid: { color: '#2a2a3a' },
+          title: { display: true, text: '상대 검색지수', color: '#555570' } },
+        x: { ticks: { color: '#555570', maxRotation: 45 }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Monthly absolute (last 12)
+  const sv = DATA['search-volume'];
+  const hist = sv.historical || [];
+  const last12 = hist.slice(-12);
+  new Chart(document.getElementById('chart-monthly'), {
+    type: 'bar',
+    data: {
+      labels: last12.map(h => h.date),
+      datasets: [{
+        label: CONFIG.brand.name,
+        data: last12.map(h => h.brands[CONFIG.brand.name]?.total || 0),
+        backgroundColor: CONFIG.brand.color,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
+        x: { ticks: { color: '#555570', maxRotation: 45 }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Seasonality
+  const seasonData = trend.seasonality?.[CONFIG.brand.name] || {};
+  const months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+  const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  const vals = months.map(m => seasonData[m] || 100);
+  new Chart(document.getElementById('chart-season'), {
+    type: 'bar',
+    data: {
+      labels: monthNames,
+      datasets: [{
+        data: vals,
+        backgroundColor: vals.map(v => v >= 110 ? '#22c55e' : v <= 92 ? '#ef4444' : '#6b7280'),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => '지수: ' + ctx.raw } }
+      },
+      scales: {
+        y: {
+          ticks: { color: '#555570' }, grid: { color: '#2a2a3a' },
+          title: { display: true, text: '계절 지수 (100=평균)', color: '#555570' }
+        },
+        x: { ticks: { color: '#555570' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Tab 2: Consumer Journey
+// ============================================================
+function renderJourney() {
+  const j = DATA['consumer-journey'];
+  const stages = j.stages;
+  const exits = stages.consideration.exit_signals.competitors;
+
+  const exitBars = Object.entries(exits)
+    .filter(([k]) => k !== '기타')
+    .sort((a, b) => b[1].share - a[1].share)
+    .map(([name, d]) => `
+      <div class="exit-bar">
+        <div class="name">${name}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${d.share * 100}%; background:${getBrandColor(name)}">${(d.share * 100).toFixed(0)}%</div>
+        </div>
+        <div class="pct">${d.mention_count}건</div>
+      </div>
+    `).join('');
+
+  return `
+    <div class="section-title">소비자 검색 여정 (키워드 기반 추정)</div>
+
+    <div class="journey-flow">
+      <div class="journey-node">
+        <div class="label">${stages.awareness.label}</div>
+        <div class="value">${formatNum(stages.awareness.total_volume)}</div>
+        <div class="keywords">${stages.awareness.keyword_count}개 키워드</div>
+      </div>
+      <div class="journey-arrow">
+        <div style="font-size:28px">&#8594;</div>
+        <div class="journey-rate">${(j.funnel_summary.awareness_to_consideration * 100).toFixed(0)}%</div>
+      </div>
+      <div class="journey-node highlight">
+        <div class="label">${stages.consideration.label}</div>
+        <div class="value">${formatNum(stages.consideration.total_volume)}</div>
+        <div class="keywords">${stages.consideration.keyword_count}개 키워드</div>
+      </div>
+      <div class="journey-arrow">
+        <div style="font-size:28px">&#8594;</div>
+        <div class="journey-rate">${(j.funnel_summary.consideration_to_conversion * 100).toFixed(0)}%</div>
+      </div>
+      <div class="journey-node">
+        <div class="label">${stages.conversion.label}</div>
+        <div class="value">${formatNum(stages.conversion.total_volume)}</div>
+        <div class="keywords">${stages.conversion.keyword_count}개 키워드</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">단계별 키워드 분포</div>
+        <div class="chart-container"><canvas id="chart-funnel"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">추정 이탈 방향 (비교 키워드 경쟁사 언급)</div>
+        <div style="padding: 8px 0">${exitBars}</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:8px; padding:8px; background:var(--bg-secondary); border-radius:6px;">
+          * GA 없이 실제 이탈률 측정 불가. '비교 키워드 내 경쟁사 언급 빈도' 기반 추정 이탈 경향.
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      ${['awareness', 'consideration', 'conversion'].map(stage => {
+        const s = stages[stage];
+        return `<div class="card">
+          <div class="card-title">${s.label} - Top Keywords</div>
+          <table class="data-table">
+            <thead><tr><th>키워드</th><th>검색량</th></tr></thead>
+            <tbody>${s.sample_keywords.map(k => `
+              <tr><td>${k.keyword}</td><td>${formatNum(k.volume)}</td></tr>
+            `).join('')}</tbody>
+          </table>
+        </div>`;
+      }).join('')}
+    </div>
+  `;
+}
+
+function initJourneyCharts() {
+  const j = DATA['consumer-journey'];
+  const stages = j.stages;
+
+  new Chart(document.getElementById('chart-funnel'), {
+    type: 'bar',
+    data: {
+      labels: [stages.awareness.label, stages.consideration.label, stages.conversion.label],
+      datasets: [{
+        label: '검색량',
+        data: [stages.awareness.total_volume, stages.consideration.total_volume, stages.conversion.total_volume],
+        backgroundColor: ['#3b82f6', '#00d4ff', '#9333ea'],
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { callbacks: { label: ctx => formatNum(ctx.raw) } }
+      },
+      scales: {
+        y: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
+        x: { ticks: { color: '#8888a0' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Tab 3: Clusters
+// ============================================================
+function renderClusters() {
+  const cl = DATA['keyword-clusters'];
+  const clusters = cl.clusters;
+
+  const clusterCards = clusters.map((c, i) => `
+    <div class="cluster-card" style="border-left-color:${c.color}">
+      <div class="cluster-header">
+        <div class="cluster-persona">${c.persona}</div>
+        <div class="cluster-share">${(c.share * 100).toFixed(0)}%</div>
+      </div>
+      <div class="cluster-desc">${c.description}</div>
+      <div class="cluster-tags">
+        ${c.top_keywords.slice(0, 5).map(k => `<span class="cluster-tag">${k.keyword}</span>`).join('')}
+      </div>
+      <div style="font-size:13px; color:var(--text-secondary)">
+        ${c.keyword_count}개 키워드 / 총 검색량 ${formatNum(c.total_volume)}
+      </div>
+      <button class="toggle-btn" onclick="toggleCluster(this, ${i})">상세 보기</button>
+      <div class="cluster-detail" id="cluster-detail-${i}">
+        <h4>니즈</h4>
+        <ul>${c.needs.map(n => `<li>+ ${n}</li>`).join('')}</ul>
+        <h4 style="margin-top:12px">Pain Points</h4>
+        <ul>${c.pain_points.map(p => `<li>- ${p}</li>`).join('')}</ul>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">키워드 클러스터 분포</div>
+        <div class="chart-container"><canvas id="chart-cluster-donut"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">클러스터별 검색량</div>
+        <div class="chart-container"><canvas id="chart-cluster-bar"></canvas></div>
+      </div>
+    </div>
+    <div class="section-title">페르소나별 상세</div>
+    <div class="grid-2">
+      ${clusterCards}
+    </div>
+  `;
+}
+
+function toggleCluster(btn, idx) {
+  const detail = document.getElementById(`cluster-detail-${idx}`);
+  detail.classList.toggle('open');
+  btn.textContent = detail.classList.contains('open') ? '접기' : '상세 보기';
+}
+
+function initClusterCharts() {
+  const cl = DATA['keyword-clusters'];
+  const clusters = cl.clusters;
+
+  new Chart(document.getElementById('chart-cluster-donut'), {
+    type: 'doughnut',
+    data: {
+      labels: clusters.map(c => c.persona),
+      datasets: [{
+        data: clusters.map(c => c.total_volume),
+        backgroundColor: clusters.map(c => c.color),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#8888a0', padding: 10, font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => `${ctx.label}: ${formatNum(ctx.raw)} (${(ctx.raw / clusters.reduce((s,c)=>s+c.total_volume,0)*100).toFixed(1)}%)` } }
+      }
+    }
+  });
+
+  new Chart(document.getElementById('chart-cluster-bar'), {
+    type: 'bar',
+    data: {
+      labels: clusters.map(c => c.persona),
+      datasets: [{
+        data: clusters.map(c => c.total_volume),
+        backgroundColor: clusters.map(c => c.color),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => formatNum(ctx.raw) } }
+      },
+      scales: {
+        x: { ticks: { color: '#555570', callback: v => formatNum(v) }, grid: { color: '#2a2a3a' } },
+        y: { ticks: { color: '#e8e8ed', font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Tab 4: AI Analysis
+// ============================================================
+function renderAI() {
+  const ai = DATA['ai-sov'];
+  const rev = DATA['reviews-sentiment'];
+  const topics = rev.by_topic;
+
+  const sentimentBars = Object.entries(topics).map(([topic, d]) => `
+    <div class="sentiment-bar-group">
+      <div class="sentiment-label">
+        <span class="topic">${topic}</span>
+        <span class="count">${d.mention_count}건</span>
+      </div>
+      <div class="sentiment-track">
+        <div class="sentiment-fill-pos" style="width:${d.positive * 100}%"></div>
+        <div class="sentiment-fill-neu" style="width:${d.neutral * 100}%"></div>
+        <div class="sentiment-fill-neg" style="width:${d.negative * 100}%"></div>
+      </div>
+    </div>
+  `).join('');
+
+  const prodTable = Object.entries(rev.by_product).map(([name, d]) => `
+    <tr>
+      <td>${name}</td>
+      <td>${d.count}</td>
+      <td>${d.avg_rating}</td>
+      <td><span style="color:${d.sentiment_score >= 50 ? 'var(--positive)' : d.sentiment_score >= 30 ? 'var(--high)' : 'var(--negative)'}">${d.sentiment_score}</span></td>
+      <td style="color:var(--text-secondary)">${d.top_issue}</td>
+    </tr>
+  `).join('');
+
+  return `
+    <div class="grid-4">
+      <div class="card">
+        <div class="card-title">AI SOV (${CONFIG.brand.name})</div>
+        <div class="kpi-value">${ai.sov_score.brands[CONFIG.brand.name]}%</div>
+        <div class="kpi-sub">전체 브랜드 언급 대비</div>
+      </div>
+      <div class="card">
+        <div class="card-title">AI 언급률</div>
+        <div class="kpi-value">${(ai.mention_rate.brands[CONFIG.brand.name].rate * 100).toFixed(0)}%</div>
+        <div class="kpi-sub">300회 응답 중 언급</div>
+      </div>
+      <div class="card">
+        <div class="card-title">1순위 추천률</div>
+        <div class="kpi-value">${(ai.first_recommendation.brands[CONFIG.brand.name].rate * 100).toFixed(0)}%</div>
+        <div class="kpi-sub">1번째로 추천된 비율</div>
+      </div>
+      <div class="card">
+        <div class="card-title">리뷰 감성 점수</div>
+        <div class="kpi-value">${rev.overall.sentiment_score}</div>
+        <div class="kpi-sub">${rev.meta.total_reviews}건 분석</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">AI 브랜드 언급률 비교</div>
+        <div class="chart-container"><canvas id="chart-ai-mention"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">AI 1순위 추천률 비교</div>
+        <div class="chart-container"><canvas id="chart-ai-rec"></canvas></div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">문맥별 AI 언급률 (${CONFIG.brand.name})</div>
+        <div class="chart-container"><canvas id="chart-ai-context"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-title">AI SOV 점유율</div>
+        <div class="chart-container"><canvas id="chart-ai-sov"></canvas></div>
+      </div>
+    </div>
+
+    <div class="section-title">리뷰 감성분석 (${rev.meta.period})</div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">토픽별 감성 분포</div>
+        ${sentimentBars}
+        <div style="display:flex; gap:16px; margin-top:12px; font-size:11px; color:var(--text-muted)">
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--positive);border-radius:2px;margin-right:4px"></span>긍정</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--neutral);border-radius:2px;margin-right:4px"></span>중립</span>
+          <span><span style="display:inline-block;width:10px;height:10px;background:var(--negative);border-radius:2px;margin-right:4px"></span>부정</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">월별 감성 추이</div>
+        <div class="chart-container"><canvas id="chart-sentiment-trend"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">제품별 리뷰 요약</div>
+      <table class="data-table">
+        <thead><tr><th>제품</th><th>리뷰 수</th><th>평균 별점</th><th>감성 점수</th><th>주요 이슈</th></tr></thead>
+        <tbody>${prodTable}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function initAICharts() {
+  const ai = DATA['ai-sov'];
+  const rev = DATA['reviews-sentiment'];
+  const brands = getAllBrands();
+
+  // Mention rate
+  const mentionSorted = brands.slice().sort((a, b) =>
+    (ai.mention_rate.brands[b]?.rate || 0) - (ai.mention_rate.brands[a]?.rate || 0)
+  );
+  new Chart(document.getElementById('chart-ai-mention'), {
+    type: 'bar',
+    data: {
+      labels: mentionSorted,
+      datasets: [{
+        data: mentionSorted.map(b => (ai.mention_rate.brands[b]?.rate || 0) * 100),
+        backgroundColor: mentionSorted.map(b => getBrandColor(b)),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(0) + '%' } }
+      },
+      scales: {
+        x: { max: 100, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
+        y: { ticks: { color: '#e8e8ed' }, grid: { display: false } }
+      }
+    }
+  });
+
+  // First rec
+  const recSorted = brands.slice().sort((a, b) =>
+    (ai.first_recommendation.brands[b]?.rate || 0) - (ai.first_recommendation.brands[a]?.rate || 0)
+  );
+  new Chart(document.getElementById('chart-ai-rec'), {
+    type: 'bar',
+    data: {
+      labels: recSorted,
+      datasets: [{
+        data: recSorted.map(b => (ai.first_recommendation.brands[b]?.rate || 0) * 100),
+        backgroundColor: recSorted.map(b => getBrandColor(b)),
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: ctx => ctx.raw.toFixed(0) + '%' } }
+      },
+      scales: {
+        x: { max: 50, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
+        y: { ticks: { color: '#e8e8ed' }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Context
+  const ctxLabels = { general_recommendation: '일반 추천', kids_furniture: '키즈 가구', living_room: '거실 가구', value_for_money: '가성비' };
+  const ctxKeys = Object.keys(ai.by_context);
+  new Chart(document.getElementById('chart-ai-context'), {
+    type: 'bar',
+    data: {
+      labels: ctxKeys.map(k => ctxLabels[k] || k),
+      datasets: [{
+        data: ctxKeys.map(k => (ai.by_context[k][CONFIG.brand.name] || 0) * 100),
+        backgroundColor: CONFIG.brand.color,
+        borderRadius: 6
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { max: 100, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
+        x: { ticks: { color: '#8888a0' }, grid: { display: false } }
+      }
+    }
+  });
+
+  // SOV Donut
+  new Chart(document.getElementById('chart-ai-sov'), {
+    type: 'doughnut',
+    data: {
+      labels: brands,
+      datasets: [{
+        data: brands.map(b => ai.sov_score.brands[b] || 0),
+        backgroundColor: brands.map(b => getBrandColor(b)),
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { color: '#8888a0', padding: 10 } },
+        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw.toFixed(1) + '%' } }
+      }
+    }
+  });
+
+  // Sentiment trend
+  const st = rev.monthly_trend;
+  new Chart(document.getElementById('chart-sentiment-trend'), {
+    type: 'line',
+    data: {
+      labels: st.map(d => d.date),
+      datasets: [
+        {
+          label: '긍정',
+          data: st.map(d => d.positive * 100),
+          borderColor: '#22c55e', backgroundColor: 'rgba(34,197,94,0.1)',
+          fill: true, tension: 0.3, borderWidth: 2
+        },
+        {
+          label: '부정',
+          data: st.map(d => d.negative * 100),
+          borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)',
+          fill: true, tension: 0.3, borderWidth: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { color: '#8888a0', usePointStyle: true } }
+      },
+      scales: {
+        y: { max: 100, ticks: { color: '#555570', callback: v => v + '%' }, grid: { color: '#2a2a3a' } },
+        x: { ticks: { color: '#555570' }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Tab 5: Strategy
+// ============================================================
+function renderStrategy() {
+  const st = DATA['strategy-matrix'];
+  const items = st.matrix_items;
+
+  const cards = items.map((item, i) => `
+    <div class="strategy-card" data-priority="${item.priority}">
+      <div class="strategy-header">
+        <div class="strategy-title">${item.label}</div>
+        <span class="priority-badge ${item.priority}">${item.priority}</span>
+      </div>
+      <div class="strategy-category">${item.category}</div>
+      <div class="strategy-desc">${item.description}</div>
+      <div class="strategy-metrics">
+        <div class="strategy-metric">
+          <span class="metric-label">Impact </span>
+          <span class="metric-value">${item.impact}</span>
+        </div>
+        <div class="strategy-metric">
+          <span class="metric-label">Feasibility </span>
+          <span class="metric-value">${item.feasibility}</span>
+        </div>
+      </div>
+      <button class="toggle-btn" onclick="toggleStrategy(this, ${i})">상세 보기</button>
+      <div class="strategy-detail" id="strategy-detail-${i}">
+        <h4 style="font-size:12px; color:var(--text-muted); margin-bottom:8px">Action Items</h4>
+        ${item.actions.map(a => `<div class="action-item">${a}</div>`).join('')}
+        <div class="strategy-expected">
+          <strong>Expected Impact:</strong> ${item.expected_impact}
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:8px">
+          Data basis: ${item.data_basis}
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="grid-1">
+      <div class="card">
+        <div class="card-title">우선순위 매트릭스 (Impact vs Feasibility)</div>
+        <div class="chart-container tall"><canvas id="chart-matrix"></canvas></div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterStrategy('all', this)">전체</button>
+      <button class="filter-btn" onclick="filterStrategy('critical', this)">Critical</button>
+      <button class="filter-btn" onclick="filterStrategy('high', this)">High</button>
+      <button class="filter-btn" onclick="filterStrategy('medium', this)">Medium</button>
+    </div>
+
+    <div class="grid-2" id="strategy-cards">
+      ${cards}
+    </div>
+  `;
+}
+
+function toggleStrategy(btn, idx) {
+  const detail = document.getElementById(`strategy-detail-${idx}`);
+  detail.classList.toggle('open');
+  btn.textContent = detail.classList.contains('open') ? '접기' : '상세 보기';
+}
+
+function filterStrategy(priority, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.strategy-card').forEach(card => {
+    if (priority === 'all' || card.dataset.priority === priority) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+function initStrategyCharts() {
+  const st = DATA['strategy-matrix'];
+  const items = st.matrix_items;
+  const priorityColors = { critical: '#ef4444', high: '#f97316', medium: '#22c55e' };
+
+  new Chart(document.getElementById('chart-matrix'), {
+    type: 'scatter',
+    data: {
+      datasets: items.map(item => ({
+        label: item.label,
+        data: [{ x: item.feasibility, y: item.impact }],
+        backgroundColor: priorityColors[item.priority] || '#888',
+        pointRadius: 12,
+        pointHoverRadius: 16
+      }))
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => `${ctx.dataset.label} (Impact: ${ctx.raw.y}, Feasibility: ${ctx.raw.x})`
+          }
+        }
+      },
+      scales: {
+        x: {
+          min: 40, max: 100,
+          title: { display: true, text: 'Feasibility (실행 용이성)', color: '#555570' },
+          ticks: { color: '#555570' }, grid: { color: '#2a2a3a' }
+        },
+        y: {
+          min: 50, max: 100,
+          title: { display: true, text: 'Impact (영향도)', color: '#555570' },
+          ticks: { color: '#555570' }, grid: { color: '#2a2a3a' }
+        }
+      }
+    }
+  });
+}
+
+// ============================================================
+// Init
+// ============================================================
+async function init() {
+  try {
+    await loadConfig();
+    await loadData();
+    initTabs();
+    renderDashboard();
+  } catch (err) {
+    document.getElementById('loading').textContent = 'Error loading data: ' + err.message;
+    console.error(err);
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>

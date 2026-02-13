@@ -1,0 +1,31 @@
+{
+  "brand": {
+    "name": "일룸",
+    "name_en": "iloom",
+    "color": "#00d4ff"
+  },
+  "competitors": [
+    { "name": "이케아", "name_en": "ikea", "color": "#3b82f6" },
+    { "name": "한샘", "name_en": "hanssem", "color": "#ef4444" },
+    { "name": "까사미아", "name_en": "casamia", "color": "#f97316" },
+    { "name": "자코모", "name_en": "jacomo", "color": "#22c55e" }
+  ],
+  "keyword_seeds": [
+    "일룸", "일룸 책상", "일룸 소파", "일룸 침대", "일룸 수납",
+    "이케아", "이케아 가구", "한샘", "한샘 가구", "까사미아", "자코모",
+    "가구 추천", "가구 브랜드", "가구 브랜드 순위",
+    "학생 책상", "아이방 꾸미기", "아이방 가구", "초등학생 책상",
+    "거실 소파", "패브릭 소파", "가죽 소파",
+    "모션데스크", "전동 책상", "높이조절 책상",
+    "신혼 가구", "신혼부부 가구", "혼수 가구",
+    "수납장", "옷장", "책장"
+  ],
+  "analysis_period": {
+    "trend_months": 24,
+    "review_months": 6
+  },
+  "dashboard": {
+    "title": "Brand Intelligence Dashboard",
+    "tabs": ["Overview", "시장분석", "소비자여정", "클러스터", "AI분석", "전략"]
+  }
+}
